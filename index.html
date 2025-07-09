@@ -59,10 +59,6 @@
       background: #fff7e0; padding: 20px; border-radius: 18px; margin: 27px 0 15px 0; font-size: 1.15em;
       box-shadow: 0 0 12px #ffe08265;
     }
-    .notice {
-      background: #fdf6e4; border-radius: 14px; padding: 15px; font-size: 1.03em; color: #b86d00; margin-bottom: 20px;
-      border: 1.8px solid #ffe082;
-    }
     .footer {
       margin-top: 22px; text-align: center; color: #666; font-size: 1.07em;
     }
@@ -156,19 +152,11 @@
         <label>上傳匯款／付款／折扣截圖（如有）</label>
         <input type="file" id="proofFile" accept="image/*,.jpg,.jpeg,.png">
       </div>
+      <!-- 🔥 只有這裡改成只剩一個下拉選單🔥 -->
       <div class="form-section">
         <label>預約時間</label>
-        <select id="weekday" onchange="updateTimeblocks()" required>
-          <option value="">請選擇星期</option>
-          <option value="2">星期二</option>
-          <option value="3">星期三</option>
-          <option value="4">星期四</option>
-          <option value="5">星期五</option>
-          <option value="6">星期六</option>
-          <option value="7">星期日</option>
-        </select>
         <select id="timeblock" required>
-          <option value="">請先選星期</option>
+          <option value="">請選擇時間</option>
         </select>
       </div>
       <!-- 規則勾選 -->
@@ -243,35 +231,47 @@
 
   <!-- JS 功能區 -->
   <script>
-    // ===== 時間表設定 =====
-    const timetable = {
-      "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
-      "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
-      "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
-      "5": ["23:00","23:30","00:00","00:30"],
-      "6": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30","01:00","01:30"],
-      "7": [
-        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
-        "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
-        "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
-        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
-      ]
-    };
-    function updateTimeblocks() {
-      const day = document.getElementById('weekday').value;
+    // ========== 本週日期請每週自行更新 ========== //
+    const timeOptions = [
+      // 星期二（7/16）
+      "7/16 (星期二) 00:00", "7/16 (星期二) 00:30", "7/16 (星期二) 01:00", "7/16 (星期二) 01:30",
+      "7/16 (星期二) 19:00", "7/16 (星期二) 19:30", "7/16 (星期二) 20:00", "7/16 (星期二) 20:30",
+      "7/16 (星期二) 21:00", "7/16 (星期二) 21:30", "7/16 (星期二) 22:00", "7/16 (星期二) 22:30",
+      "7/16 (星期二) 23:00", "7/16 (星期二) 23:30",
+      // 星期三（7/17）
+      "7/17 (星期三) 23:00", "7/17 (星期三) 23:30", "7/18 (星期四) 00:00", "7/18 (星期四) 00:30",
+      "7/18 (星期四) 01:00", "7/18 (星期四) 01:30",
+      // 星期四（7/18）
+      "7/18 (星期四) 19:00", "7/18 (星期四) 19:30", "7/18 (星期四) 20:00", "7/18 (星期四) 20:30",
+      "7/18 (星期四) 21:00", "7/18 (星期四) 21:30", "7/18 (星期四) 22:00", "7/18 (星期四) 22:30",
+      "7/18 (星期四) 23:00", "7/18 (星期四) 23:30", "7/19 (星期五) 00:00", "7/19 (星期五) 00:30",
+      // 星期五（7/19）
+      "7/19 (星期五) 23:00", "7/19 (星期五) 23:30", "7/20 (星期六) 00:00", "7/20 (星期六) 00:30",
+      // 星期六（7/20）
+      "7/20 (星期六) 19:00", "7/20 (星期六) 19:30", "7/20 (星期六) 20:00", "7/20 (星期六) 20:30",
+      "7/20 (星期六) 21:00", "7/20 (星期六) 21:30", "7/20 (星期六) 22:00", "7/20 (星期六) 22:30",
+      "7/20 (星期六) 23:00", "7/20 (星期六) 23:30", "7/21 (星期日) 00:00", "7/21 (星期日) 00:30",
+      "7/21 (星期日) 01:00", "7/21 (星期日) 01:30",
+      // 星期日（7/21）
+      "7/21 (星期日) 00:00","7/21 (星期日) 00:30","7/21 (星期日) 01:00","7/21 (星期日) 01:30","7/21 (星期日) 02:00","7/21 (星期日) 02:30","7/21 (星期日) 03:00","7/21 (星期日) 03:30",
+      "7/21 (星期日) 04:00","7/21 (星期日) 04:30","7/21 (星期日) 05:00","7/21 (星期日) 05:30","7/21 (星期日) 06:00","7/21 (星期日) 06:30","7/21 (星期日) 07:00","7/21 (星期日) 07:30",
+      "7/21 (星期日) 08:00","7/21 (星期日) 08:30","7/21 (星期日) 09:00","7/21 (星期日) 09:30","7/21 (星期日) 10:00","7/21 (星期日) 10:30","7/21 (星期日) 11:00","7/21 (星期日) 11:30",
+      "7/21 (星期日) 12:00","7/21 (星期日) 12:30","7/21 (星期日) 13:00","7/21 (星期日) 13:30","7/21 (星期日) 14:00","7/21 (星期日) 14:30","7/21 (星期日) 15:00","7/21 (星期日) 15:30",
+      "7/21 (星期日) 16:00","7/21 (星期日) 16:30","7/21 (星期日) 17:00","7/21 (星期日) 17:30","7/21 (星期日) 18:00","7/21 (星期日) 18:30","7/21 (星期日) 19:00","7/21 (星期日) 19:30",
+      "7/21 (星期日) 20:00","7/21 (星期日) 20:30","7/21 (星期日) 21:00","7/21 (星期日) 21:30","7/21 (星期日) 22:00","7/21 (星期日) 22:30","7/21 (星期日) 23:00","7/21 (星期日) 23:30"
+    ];
+    // 預約時間選單自動填入所有時段
+    window.onload = function() {
       const blockSel = document.getElementById('timeblock');
-      blockSel.innerHTML = '<option value="">請選擇時間</option>';
-      if (!timetable[day]) return;
-      timetable[day].forEach(time => {
+      timeOptions.forEach(time => {
         let opt = document.createElement('option');
         opt.value = time;
         opt.innerText = time;
         blockSel.appendChild(opt);
       });
-    }
-    document.getElementById('weekday').addEventListener('change', updateTimeblocks);
+    };
 
-    // ====== 折扣金截圖上傳切換 ======
+    // 下面全部都是你原本的功能，可直接保留
     function toggleDiscountProof() {
       const discount = document.getElementById('discount').value;
       const proof = document.getElementById('discountProof');
@@ -284,15 +284,11 @@
         label.style.display = "block";
       }
     }
-
-    // ====== 付款方式互動 ======
     function onPayTypeChange() {
       const payType = document.getElementById('payType').value;
       document.getElementById('bankInfo').style.display = (payType==="bank") ? "" : "none";
       document.getElementById('payRemark').style.display = (payType==="linepay") ? "" : "none";
     }
-
-    // ====== 計算金額邏輯 ======
     function calcAll() {
       let price = [200,250,200,100,200];
       let items = [];
@@ -314,9 +310,7 @@
       document.getElementById('donateTxt').innerText = donate;
       let total = subtotal - discount + donate;
       document.getElementById('total').innerText = total<0?0:total;
-      document.getElementById('showTime').innerText =
-        (getWeekdayStr(document.getElementById('weekday').value) || '') +
-        (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : '');
+      document.getElementById('showTime').innerText = document.getElementById('timeblock').value || "";
       // 買五送二邏輯
       let bonus = document.getElementById('bonusSection');
       let bonusCount = Math.floor(singles / 5) * 2;
@@ -340,56 +334,52 @@
         bonus.style.display = 'none';
       }
     }
-    function getWeekdayStr(num) {
-      switch(num) {
-        case '2': return '星期二'; case '3': return '星期三'; case '4': return '星期四'; case '5': return '星期五'; case '6': return '星期六'; case '7': return '星期日';
-        default: return '';
+    document.getElementById("orderForm").onsubmit = function(event){
+      event.preventDefault();
+      if (!document.getElementById("agreeRule").checked) {
+        alert("請勾選同意服務規則！");
+        return;
       }
-    }
-
-   // ====== 表單送出（升級：可自動判斷預約成功或時段被搶單）======
-document.getElementById("orderForm").onsubmit = function(event){
-  event.preventDefault();
-  if (!document.getElementById("agreeRule").checked) {
-    alert("請勾選同意服務規則！");
-    return;
-  }
-  let singles = 0;
-  for(let i=1;i<=5;i++){
-    singles += parseInt(document.getElementById('s'+i).value)||0;
-  }
-  // collect bonus selected values
-  let bonusVals = [];
-  let bonusCount = Math.floor(singles / 5) * 2;
-  for (let i = 1; i <= bonusCount; i++) {
-    let sel = document.getElementById(`bonus${i}`);
-    if (sel && sel.value) bonusVals.push(sel.value);
-  }
-  let formData = {
-    nickname: document.getElementById('nickname').value,
-    payType: document.getElementById('payType').value,
-    time: getWeekdayStr(document.getElementById('weekday').value) + ' ' + document.getElementById('timeblock').value,
-    items: document.getElementById('showItems').innerText,
-    subtotal: document.getElementById('subtotalTxt').innerText,
-    discount: document.getElementById('discountTxt').innerText,
-    donate: document.getElementById('donateTxt').innerText,
-    bonus: bonusVals.join(','),
-    donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
-  };
-  fetch("https://script.google.com/macros/s/AKfycbyZ2Bq96dndiXbf9ZwYrw-eRbU-izKqpIEU3q-ZBH6quHkjVxeWBNc8dmiU2W0EJG_T/exec", {
-    method: "POST",
-    body: JSON.stringify(formData),
-    headers: { "Content-Type": "application/json" }
-  }).then(r=>r.text()).then(res=>{
-    if(res.indexOf("success")>=0){
-      alert('預約成功！Ru 已收到你的預約表單～');
-      document.getElementById('orderForm').reset();
-      calcAll();
-    }else if(res.indexOf("黑名單")>=0){
-      alert("你已被加入黑名單，無法預約！");
-    }else{
-      alert('此時段已被預約，請重新選擇！');
-    }
-  }).catch(e=>{
-    alert('送出失敗，請聯絡Ru！');
-  });
+      let singles = 0;
+      for(let i=1;i<=5;i++){
+        singles += parseInt(document.getElementById('s'+i).value)||0;
+      }
+      // collect bonus selected values
+      let bonusVals = [];
+      let bonusCount = Math.floor(singles / 5) * 2;
+      for (let i = 1; i <= bonusCount; i++) {
+        let sel = document.getElementById(`bonus${i}`);
+        if (sel && sel.value) bonusVals.push(sel.value);
+      }
+      let formData = {
+        nickname: document.getElementById('nickname').value,
+        payType: document.getElementById('payType').value,
+        time: document.getElementById('timeblock').value,
+        items: document.getElementById('showItems').innerText,
+        subtotal: document.getElementById('subtotalTxt').innerText,
+        discount: document.getElementById('discountTxt').innerText,
+        donate: document.getElementById('donateTxt').innerText,
+        bonus: bonusVals.join(','),
+        donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
+      };
+      fetch("https://script.google.com/macros/s/AKfycbyZ2Bq96dndiXbf9ZwYrw-eRbU-izKqpIEU3q-ZBH6quHkjVxeWBNc8dmiU2W0EJG_T/exec", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" }
+      }).then(r=>r.text()).then(res=>{
+        if(res.indexOf("success")>=0){
+          alert('預約成功！Ru 已收到你的預約表單～');
+          document.getElementById('orderForm').reset();
+          calcAll();
+        }else if(res.indexOf("黑名單")>=0){
+          alert("你已被加入黑名單，無法預約！");
+        }else{
+          alert('此時段已被預約，請重新選擇！');
+        }
+      }).catch(e=>{
+        alert('送出失敗，請聯絡Ru！');
+      });
+    };
+  </script>
+</body>
+</html>
