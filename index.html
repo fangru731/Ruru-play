@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌟 Ruru 陪玩寶貝單 🌟</title>
   <style>
+    /* --- 你的全部 CSS 原封不動 --- */
     body {
       background-image: url('star-bg-demo.jpg');
       background-size: cover;
@@ -70,7 +71,6 @@
     }
     button:hover { background: #fff176; color: #e67a00;}
     .agree-label { font-weight: normal; color:#c18700; }
-    /* 手機 */
     @media (max-width: 700px) {
       .container { max-width: 99vw; padding: 4vw 2vw;}
       .q-ruru-inline { width:44px;}
@@ -345,7 +345,7 @@
       }
     }
 
-    // ====== 表單送出 ======
+    // ====== 表單送出（這段我幫你補好串接 webhook）======
     document.getElementById("orderForm").onsubmit = function(event){
       event.preventDefault();
       if (!document.getElementById("agreeRule").checked) {
@@ -371,14 +371,16 @@
         subtotal: document.getElementById('subtotalTxt').innerText,
         discount: document.getElementById('discountTxt').innerText,
         donate: document.getElementById('donateTxt').innerText,
-        bonus: bonusVals.join(','),
+        bonus: bonusVals.join(',')
       };
-      fetch("【https://script.google.com/macros/s/AKfycbymrXfRiiNVtpFjBVX5ZoEVOWUfMamLKN96zm9B_JCXloLE2vpX7vIoKwukiF4kAk0l/exec】", {
+      fetch("https://script.google.com/macros/s/AKfycbxhxzegl4qffudvPenTJYRlMehlDjgFZlKfmqUmz_di34dPDYZJDnRnFwibfbQQXcIR/exec", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" }
       }).then(r=>r.text()).then(res=>{
-        alert('預約已送出！');
+        alert('預約已送出！Ru 已收到你的預約表單～');
+        document.getElementById('orderForm').reset();
+        calcAll();
       }).catch(e=>{
         alert('送出失敗，請聯絡Ru！');
       });
