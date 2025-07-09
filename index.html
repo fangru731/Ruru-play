@@ -2,72 +2,33 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌟 Ruru 陪玩寶貝單 🌟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      background-image: url('star-bg-demo.jpg');
-      background-size: cover;
-      background-attachment: fixed;
-      font-family: 'Microsoft JhengHei', Arial, sans-serif;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      background: rgba(255,255,255,0.97);
-      max-width: 820px;
-      margin: 40px auto 22px auto;
-      padding: 32px 18px 18px 18px;
-      border-radius: 28px;
-      box-shadow: 0 0 28px #fae89d;
-      position: relative;
-    }
+    body { background-image: url('star-bg-demo.jpg'); background-size: cover; background-attachment: fixed;
+      font-family: 'Microsoft JhengHei', Arial, sans-serif; color: #333; margin: 0; padding: 0; }
+    .container { background: rgba(255,255,255,0.97); max-width: 820px; margin: 40px auto 22px auto; padding: 32px 18px 18px 18px;
+      border-radius: 28px; box-shadow: 0 0 28px #fae89d; position: relative; }
     .title-header { text-align:center; margin-bottom:22px; position:relative; }
     .minions-row { display:flex; justify-content:center; gap:26px; margin-bottom:10px; }
     .minions-row.bottom { margin-top:15px; margin-bottom:0; }
     .minions-row img { width:88px; height:88px; }
-    .title-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: 38px; margin-bottom: 0;
-    }
-    .q-ruru-inline {
-      width: 152px;
-      border-radius: 20px;
-      box-shadow: 0 0 10px #ffe082b0;
-      background: #fff;
-    }
-    h1 {
-      flex: 0 1 auto;
-      color: #ffb300;
-      margin: 0 0 0 0;
-      font-size: 2.5em;
-      letter-spacing: 2px;
-      text-align: center;
-      font-weight: bold;
-      text-shadow: 0 2px 8px #fff9cd;
-    }
+    .title-row { display: flex; align-items: center; justify-content: center; gap: 38px; margin-bottom: 0; }
+    .q-ruru-inline { width: 152px; border-radius: 20px; box-shadow: 0 0 10px #ffe082b0; background: #fff; }
+    h1 { flex: 0 1 auto; color: #ffb300; margin: 0; font-size: 2.5em; letter-spacing: 2px; text-align: center;
+      font-weight: bold; text-shadow: 0 2px 8px #fff9cd; }
     .form-section { margin-bottom:22px; }
     label { font-weight: bold; margin-top: 18px; display: block; color: #333; font-size: 1.11em;}
-    input[type="text"], input[type="number"], select {
-      width: 95%; padding: 10px; border: 1.9px solid #ffde89;
-      border-radius: 10px; margin-bottom: 8px; margin-top: 4px; font-size: 1.09em; box-sizing: border-box;
-    }
+    input[type="text"], input[type="number"], select { width: 95%; padding: 10px; border: 1.9px solid #ffde89;
+      border-radius: 10px; margin-bottom: 8px; margin-top: 4px; font-size: 1.09em; box-sizing: border-box; }
     input[type="file"] { margin: 8px 0 16px 0;}
     .checkbox-label { font-weight: normal; margin-left: 4px;}
-    .order-summary {
-      background: #fff7e0; padding: 20px; border-radius: 18px; margin: 27px 0 15px 0; font-size: 1.15em;
-      box-shadow: 0 0 12px #ffe08265;
-    }
-    .footer {
-      margin-top: 22px; text-align: center; color: #666; font-size: 1.07em;
-    }
+    .order-summary { background: #fff7e0; padding: 20px; border-radius: 18px; margin: 27px 0 15px 0; font-size: 1.15em;
+      box-shadow: 0 0 12px #ffe08265;}
+    .footer { margin-top: 22px; text-align: center; color: #666; font-size: 1.07em; }
     .qr { display:block; margin:22px auto 7px auto; width:105px; border-radius:16px; box-shadow:0 0 9px #ffef8f55;}
-    button, .btn {
-      background: #ffd43b; color:#a67200; font-size: 1.22em; border:none; border-radius:12px; padding:13px 32px; cursor:pointer;
-      margin-top:13px; box-shadow:0 2px 12px #ffe08270; transition:0.1s;
-      font-weight:bold;
-    }
+    button, .btn { background: #ffd43b; color:#a67200; font-size: 1.22em; border:none; border-radius:12px; padding:13px 32px;
+      cursor:pointer; margin-top:13px; box-shadow:0 2px 12px #ffe08270; transition:0.1s; font-weight:bold; }
     button:hover { background: #fff176; color: #e67a00;}
     .agree-label { font-weight: normal; color:#c18700; }
     @media (max-width: 800px) {
@@ -77,30 +38,26 @@
       .qr { width:54px; }
       h1 { font-size: 1.35em; }
     }
+    select option[disabled] { color:#bbb; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- ==== 標題+頭貼+上三下三小小兵 ==== -->
     <div class="title-header">
       <div class="minions-row">
-        <img src="minion-1.png" alt="小小兵1">
-        <img src="minion-2.png" alt="小小兵2">
-        <img src="minion-3.png" alt="小小兵3">
+        <img src="minion-1.png"><img src="minion-2.png"><img src="minion-3.png">
       </div>
       <div class="title-row">
         <h1>🌟 Ruru 陪玩寶貝單 🌟</h1>
-        <img src="q-ruru-demo.png" class="q-ruru-inline" alt="Q版Ruru">
+        <img src="q-ruru-demo.png" class="q-ruru-inline">
       </div>
       <div class="minions-row bottom">
-        <img src="minion-4.png" alt="小小兵4">
-        <img src="minion-5.png" alt="小小兵5">
-        <img src="minion-6.png" alt="小小兵6">
+        <img src="minion-4.png"><img src="minion-5.png"><img src="minion-6.png">
       </div>
     </div>
 
-    <!-- ==== 表單開始 ==== -->
     <form id="orderForm" autocomplete="off">
+      <!-- 你的所有表單欄位照舊 -->
       <div class="form-section">
         <label for="nickname">暱稱（必填）</label>
         <input type="text" id="nickname" maxlength="12" required placeholder="請填你的暱稱">
@@ -126,7 +83,6 @@
           <option value="bank">匯款轉帳</option>
         </select>
       </div>
-      <!-- 匯款資訊區塊 -->
       <div id="bankInfo" style="display:none; background:#fffde5; border:1.2px solid #ffe082; border-radius:10px; padding:11px 16px 11px 16px; color:#a36b00; margin-bottom:10px; font-size:1em;">
         <b>匯款資訊：</b><br>
         LINE Bank 銀行帳戶：824 連線商業銀行<br>
@@ -152,234 +108,89 @@
         <label>上傳匯款／付款／折扣截圖（如有）</label>
         <input type="file" id="proofFile" accept="image/*,.jpg,.jpeg,.png">
       </div>
-      <!-- 🔥 只有這裡改成只剩一個下拉選單🔥 -->
+      <!-- 🔥 分開星期與時間 🔥 -->
       <div class="form-section">
-        <label>預約時間</label>
-        <select id="timeblock" required>
-          <option value="">請選擇時間</option>
+        <label>預約星期</label>
+        <select id="weekday" onchange="updateTimeblocks()" required>
+          <option value="">請選擇星期</option>
+          <option value="2">星期二</option>
+          <option value="3">星期三</option>
+          <option value="4">星期四</option>
+          <option value="5">星期五</option>
+          <option value="6">星期六</option>
+          <option value="7">星期日</option>
         </select>
       </div>
-      <!-- 規則勾選 -->
-      <div class="form-section" style="margin-bottom: 8px;">
-        <div style="max-height:210px; overflow-y:auto; border:1.2px solid #ffe082; background:#fffdf5; border-radius:9px; padding:10px; font-size:1em; color:#a36b00;">
-          <b>《Ru 的陪玩注意事項與服務規則》🌹</b><br>
-          📌 下單前請務必詳閱，保障彼此權益與互動品質。<br>
-          <b>🧡 一、服務本質與互動原則</b><br>
-          本服務為純線上「語音／文字聊天、陪唱、陪玩遊戲」等陪伴互動…<br>
-          <b>💳 二、付款與預約須知</b><br>
-          須先完成付款（Line Pay／匯款）…<br>
-          <b>🕒 三、排程與時間說明</b><br>
-          若同時段預約人數多…<br>
-          <b>🛡️ 四、禁止行為與黑單制度</b><br>
-          嚴禁以下違規行為…<br>
-          <b>📢 五、社群與 IG 規範</b><br>
-          歡迎追蹤 IG：@fangru_0731…<br>
-          <b>🔐 六、隱私保護與公開限制</b><br>
-          所有語音、文字、圖片內容皆屬私人互動…<br>
-          <b>🚫 七、優惠與黑名單規則</b><br>
-          優惠券與活動不得重複使用…<br>
-          <b>🌸 八、溫柔結語</b><br>
-          我是 Ru，致力於打造一個溫柔、安全、界線清楚的陪伴空間…<br>
-          <br>
-          <b style="color:#c22;">📌 ⟪下單即表示您已閱讀並完全同意上述所有服務條款，違反規則恕不退款也不再提供服務⟫</b>
-        </div>
-        <label class="agree-label"><input type="checkbox" id="agreeRule" required> 我已詳細閱讀並同意上述《Ru 的陪玩注意事項與服務規則》（必須勾選）</label>
+      <div class="form-section">
+        <label>預約時段</label>
+        <select id="timeblock" required>
+          <option value="">請先選星期</option>
+        </select>
       </div>
+      <!-- ...規則、同意勾選、送出鈕、訂單總覽區... -->
+      <!-- 這裡都跟你原本一致即可！ -->
       <div class="form-section" style="text-align:center;">
         <button type="button" onclick="calcAll()">計算應付金額</button>
         <button type="submit" class="btn">完成預約並送出</button>
       </div>
     </form>
 
-    <!-- 訂單總覽 -->
-    <div class="order-summary" id="summaryBox">
-      <b>預約時間：</b><span id="showTime"></span><br>
-      <b>所選項目：</b><span id="showItems"></span><br>
-      <b>服務金額小計：</b><span id="subtotalTxt">0</span> 元<br>
-      <b>折扣金額：</b><span id="discountTxt">0</span> 元<br>
-      <b>贊助金額：</b><span id="donateTxt">0</span> 元<br>
-      <b>最終應付金額：</b><span id="total">0</span> 元
-    </div>
+    <!-- 訂單總覽、買五送二、LINE QR ... 略，照你原本內容即可 -->
 
-    <!-- 買五送二自動顯示 -->
-    <div class="order-summary" id="bonusSection" style="background:#fffbe0; display:none;">
-      🎁 買五送二優惠已啟動！請選擇兩項要贈送的服務：
-      <select id="bonus1">
-        <option value="">請選擇贈送項目</option>
-        <option value="s1">傳說對決</option>
-        <option value="s2">語音通話</option>
-        <option value="s3">打字聊天</option>
-        <option value="s4">全民Party 唱歌</option>
-        <option value="s5">情感諮詢</option>
-      </select>
-      <select id="bonus2">
-        <option value="">請選擇贈送項目</option>
-        <option value="s1">傳說對決</option>
-        <option value="s2">語音通話</option>
-        <option value="s3">打字聊天</option>
-        <option value="s4">全民Party 唱歌</option>
-        <option value="s5">情感諮詢</option>
-      </select>
-    </div>
-
-    <!-- LINE QR code -->
     <img src="ru-line-qr-demo.png" class="qr" alt="Line QR Code">
-    <div class="footer">
-      加我官方 LINE 聯繫喔！
-    </div>
+    <div class="footer">加我官方 LINE 聯繫喔！</div>
   </div>
-
-  <!-- JS 功能區 -->
   <script>
-    // ========== 本週日期請每週自行更新 ========== //
-    const timeOptions = [
-      // 星期二（7/16）
-      "7/16 (星期二) 00:00", "7/16 (星期二) 00:30", "7/16 (星期二) 01:00", "7/16 (星期二) 01:30",
-      "7/16 (星期二) 19:00", "7/16 (星期二) 19:30", "7/16 (星期二) 20:00", "7/16 (星期二) 20:30",
-      "7/16 (星期二) 21:00", "7/16 (星期二) 21:30", "7/16 (星期二) 22:00", "7/16 (星期二) 22:30",
-      "7/16 (星期二) 23:00", "7/16 (星期二) 23:30",
-      // 星期三（7/17）
-      "7/17 (星期三) 23:00", "7/17 (星期三) 23:30", "7/18 (星期四) 00:00", "7/18 (星期四) 00:30",
-      "7/18 (星期四) 01:00", "7/18 (星期四) 01:30",
-      // 星期四（7/18）
-      "7/18 (星期四) 19:00", "7/18 (星期四) 19:30", "7/18 (星期四) 20:00", "7/18 (星期四) 20:30",
-      "7/18 (星期四) 21:00", "7/18 (星期四) 21:30", "7/18 (星期四) 22:00", "7/18 (星期四) 22:30",
-      "7/18 (星期四) 23:00", "7/18 (星期四) 23:30", "7/19 (星期五) 00:00", "7/19 (星期五) 00:30",
-      // 星期五（7/19）
-      "7/19 (星期五) 23:00", "7/19 (星期五) 23:30", "7/20 (星期六) 00:00", "7/20 (星期六) 00:30",
-      // 星期六（7/20）
-      "7/20 (星期六) 19:00", "7/20 (星期六) 19:30", "7/20 (星期六) 20:00", "7/20 (星期六) 20:30",
-      "7/20 (星期六) 21:00", "7/20 (星期六) 21:30", "7/20 (星期六) 22:00", "7/20 (星期六) 22:30",
-      "7/20 (星期六) 23:00", "7/20 (星期六) 23:30", "7/21 (星期日) 00:00", "7/21 (星期日) 00:30",
-      "7/21 (星期日) 01:00", "7/21 (星期日) 01:30",
-      // 星期日（7/21）
-      "7/21 (星期日) 00:00","7/21 (星期日) 00:30","7/21 (星期日) 01:00","7/21 (星期日) 01:30","7/21 (星期日) 02:00","7/21 (星期日) 02:30","7/21 (星期日) 03:00","7/21 (星期日) 03:30",
-      "7/21 (星期日) 04:00","7/21 (星期日) 04:30","7/21 (星期日) 05:00","7/21 (星期日) 05:30","7/21 (星期日) 06:00","7/21 (星期日) 06:30","7/21 (星期日) 07:00","7/21 (星期日) 07:30",
-      "7/21 (星期日) 08:00","7/21 (星期日) 08:30","7/21 (星期日) 09:00","7/21 (星期日) 09:30","7/21 (星期日) 10:00","7/21 (星期日) 10:30","7/21 (星期日) 11:00","7/21 (星期日) 11:30",
-      "7/21 (星期日) 12:00","7/21 (星期日) 12:30","7/21 (星期日) 13:00","7/21 (星期日) 13:30","7/21 (星期日) 14:00","7/21 (星期日) 14:30","7/21 (星期日) 15:00","7/21 (星期日) 15:30",
-      "7/21 (星期日) 16:00","7/21 (星期日) 16:30","7/21 (星期日) 17:00","7/21 (星期日) 17:30","7/21 (星期日) 18:00","7/21 (星期日) 18:30","7/21 (星期日) 19:00","7/21 (星期日) 19:30",
-      "7/21 (星期日) 20:00","7/21 (星期日) 20:30","7/21 (星期日) 21:00","7/21 (星期日) 21:30","7/21 (星期日) 22:00","7/21 (星期日) 22:30","7/21 (星期日) 23:00","7/21 (星期日) 23:30"
-    ];
-    // 預約時間選單自動填入所有時段
-    window.onload = function() {
+    // 本週每一天的所有可選時段
+    const timetable = {
+      "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
+      "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
+      "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
+      "5": ["23:00","23:30","00:00","00:30"],
+      "6": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30","01:00","01:30"],
+      "7": [
+        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
+        "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
+        "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
+      ]
+    };
+
+    // 假設這是已預約的時段清單 (你要改成fetch後台API取得)
+    let reservedTimes = {
+      "2": ["19:30","21:00"], // 範例：星期二 19:30、21:00被預約
+      "3": [],
+      "4": ["20:30"],
+      "5": [],
+      "6": [],
+      "7": ["09:00"]
+    };
+
+    function updateTimeblocks() {
+      const day = document.getElementById('weekday').value;
       const blockSel = document.getElementById('timeblock');
-      timeOptions.forEach(time => {
+      blockSel.innerHTML = '<option value="">請選擇時段</option>';
+      if (!timetable[day]) return;
+      // 當前時間（只針對今天會排除已過）
+      const now = new Date();
+      const today = (now.getDay() === 0 ? 7 : now.getDay()).toString(); // 週日為7
+      timetable[day].forEach(time => {
+        // 檢查是否已過（只針對今天）
+        let disabled = false;
+        if (day === today) {
+          const [h, m] = time.split(':');
+          if (+h < now.getHours() || (+h === now.getHours() && +m <= now.getMinutes())) disabled = true;
+        }
+        // 檢查已預約
+        if (reservedTimes[day] && reservedTimes[day].includes(time)) disabled = true;
         let opt = document.createElement('option');
         opt.value = time;
-        opt.innerText = time;
+        opt.innerText = time + (disabled ? '（已被預約或已過）' : '');
+        if (disabled) opt.disabled = true;
         blockSel.appendChild(opt);
       });
-    };
-
-    // 下面全部都是你原本的功能，可直接保留
-    function toggleDiscountProof() {
-      const discount = document.getElementById('discount').value;
-      const proof = document.getElementById('discountProof');
-      const label = document.getElementById('discountProofLabel');
-      if (discount === "0") {
-        proof.style.display = "none";
-        label.style.display = "none";
-      } else {
-        proof.style.display = "block";
-        label.style.display = "block";
-      }
     }
-    function onPayTypeChange() {
-      const payType = document.getElementById('payType').value;
-      document.getElementById('bankInfo').style.display = (payType==="bank") ? "" : "none";
-      document.getElementById('payRemark').style.display = (payType==="linepay") ? "" : "none";
-    }
-    function calcAll() {
-      let price = [200,250,200,100,200];
-      let items = [];
-      let subtotal = 0;
-      let singles = 0;
-      for(let i=1;i<=5;i++){
-        let v = parseInt(document.getElementById('s'+i).value)||0;
-        if(v>0){
-          items.push(['傳說對決','語音通話','打字聊天','全民Party 唱歌','情感諮詢'][i-1]+' x'+v);
-          subtotal += v*price[i-1];
-          singles += v;
-        }
-      }
-      document.getElementById('showItems').innerText = items.join('、')||'無';
-      document.getElementById('subtotalTxt').innerText = subtotal;
-      let discount = parseInt(document.getElementById('discount').value)||0;
-      document.getElementById('discountTxt').innerText = discount;
-      let donate = document.getElementById('donateCheck').checked ? (parseInt(document.getElementById('donateAmt').value)||0) : 0;
-      document.getElementById('donateTxt').innerText = donate;
-      let total = subtotal - discount + donate;
-      document.getElementById('total').innerText = total<0?0:total;
-      document.getElementById('showTime').innerText = document.getElementById('timeblock').value || "";
-      // 買五送二邏輯
-      let bonus = document.getElementById('bonusSection');
-      let bonusCount = Math.floor(singles / 5) * 2;
-      if (bonusCount > 0) {
-        bonus.style.display = '';
-        let selectHTML = '';
-        for (let i = 1; i <= bonusCount; i++) {
-          selectHTML +=
-            `<select id="bonus${i}" style="margin-right:9px;margin-top:7px;">
-              <option value="">請選擇贈送項目</option>
-              <option value="s1">傳說對決</option>
-              <option value="s2">語音通話</option>
-              <option value="s3">打字聊天</option>
-              <option value="s4">全民Party 唱歌</option>
-              <option value="s5">情感諮詢</option>
-            </select>`;
-        }
-        bonus.innerHTML =
-          `🎁 已達買${Math.floor(singles/5)*5}送${bonusCount}優惠！請選擇贈送的服務：<br>${selectHTML}`;
-      } else {
-        bonus.style.display = 'none';
-      }
-    }
-    document.getElementById("orderForm").onsubmit = function(event){
-      event.preventDefault();
-      if (!document.getElementById("agreeRule").checked) {
-        alert("請勾選同意服務規則！");
-        return;
-      }
-      let singles = 0;
-      for(let i=1;i<=5;i++){
-        singles += parseInt(document.getElementById('s'+i).value)||0;
-      }
-      // collect bonus selected values
-      let bonusVals = [];
-      let bonusCount = Math.floor(singles / 5) * 2;
-      for (let i = 1; i <= bonusCount; i++) {
-        let sel = document.getElementById(`bonus${i}`);
-        if (sel && sel.value) bonusVals.push(sel.value);
-      }
-      let formData = {
-        nickname: document.getElementById('nickname').value,
-        payType: document.getElementById('payType').value,
-        time: document.getElementById('timeblock').value,
-        items: document.getElementById('showItems').innerText,
-        subtotal: document.getElementById('subtotalTxt').innerText,
-        discount: document.getElementById('discountTxt').innerText,
-        donate: document.getElementById('donateTxt').innerText,
-        bonus: bonusVals.join(','),
-        donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
-      };
-      fetch("https://script.google.com/macros/s/AKfycbyZ2Bq96dndiXbf9ZwYrw-eRbU-izKqpIEU3q-ZBH6quHkjVxeWBNc8dmiU2W0EJG_T/exec", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" }
-      }).then(r=>r.text()).then(res=>{
-        if(res.indexOf("success")>=0){
-          alert('預約成功！Ru 已收到你的預約表單～');
-          document.getElementById('orderForm').reset();
-          calcAll();
-        }else if(res.indexOf("黑名單")>=0){
-          alert("你已被加入黑名單，無法預約！");
-        }else{
-          alert('此時段已被預約，請重新選擇！');
-        }
-      }).catch(e=>{
-        alert('送出失敗，請聯絡Ru！');
-      });
-    };
+    // 其餘 JS 金額計算等功能，照你原本內容即可
   </script>
 </body>
 </html>
