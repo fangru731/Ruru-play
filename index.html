@@ -5,27 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌟 Ruru 陪玩寶貝單 🌟</title>
   <style>
-    body { background-image: url('star-bg-demo.jpg'); background-size: cover; background-attachment: fixed; font-family: 'Microsoft JhengHei', Arial, sans-serif; color: #333; margin: 0; padding: 0; }
-    .container { background: rgba(255,255,255,0.97); max-width: 820px; margin: 40px auto 22px auto; padding: 32px 18px 18px 18px; border-radius: 28px; box-shadow: 0 0 28px #fae89d; position: relative; }
+    body {
+      background-image: url('star-bg-demo.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      font-family: 'Microsoft JhengHei', Arial, sans-serif;
+      color: #333;
+      margin: 0; padding: 0;
+    }
+    .container {
+      background: rgba(255,255,255,0.97);
+      max-width: 820px;
+      margin: 40px auto 22px auto;
+      padding: 32px 18px 18px 18px;
+      border-radius: 28px;
+      box-shadow: 0 0 28px #fae89d;
+      position: relative;
+    }
     .title-header { text-align:center; margin-bottom:22px; position:relative; }
     .minions-row { display:flex; justify-content:center; gap:26px; margin-bottom:10px; }
     .minions-row.bottom { margin-top:15px; margin-bottom:0; }
     .minions-row img { width:88px; height:88px; }
-    .title-row { display: flex; align-items: center; justify-content: center; gap: 38px; margin-bottom: 0; }
-    .q-ruru-inline { width: 152px; border-radius: 20px; box-shadow: 0 0 10px #ffe082b0; background: #fff; }
-    h1 { flex: 0 1 auto; color: #ffb300; margin: 0; font-size: 2.5em; letter-spacing: 2px; text-align: center; font-weight: bold; text-shadow: 0 2px 8px #fff9cd; }
+    .title-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 38px; margin-bottom: 0;
+    }
+    .q-ruru-inline {
+      width: 152px; border-radius: 20px;
+      box-shadow: 0 0 10px #ffe082b0; background: #fff;
+    }
+    h1 {
+      flex: 0 1 auto; color: #ffb300; margin: 0;
+      font-size: 2.5em; letter-spacing: 2px; text-align: center; font-weight: bold;
+      text-shadow: 0 2px 8px #fff9cd;
+    }
     .form-section { margin-bottom:22px; }
     label { font-weight: bold; margin-top: 18px; display: block; color: #333; font-size: 1.11em;}
-    input[type="text"], input[type="number"], select { width: 95%; padding: 10px; border: 1.9px solid #ffde89; border-radius: 10px; margin-bottom: 8px; margin-top: 4px; font-size: 1.09em; box-sizing: border-box; }
+    input[type="text"], input[type="number"], select {
+      width: 95%; padding: 10px; border: 1.9px solid #ffde89;
+      border-radius: 10px; margin-bottom: 8px; margin-top: 4px; font-size: 1.09em; box-sizing: border-box;
+    }
     input[type="file"] { margin: 8px 0 16px 0;}
     .checkbox-label { font-weight: normal; margin-left: 4px;}
-    .order-summary { background: #fff7e0; padding: 20px; border-radius: 18px; margin: 27px 0 15px 0; font-size: 1.15em; box-shadow: 0 0 12px #ffe08265; }
-    .footer { margin-top: 22px; text-align: center; color: #666; font-size: 1.07em; }
+    .order-summary {
+      background: #fff7e0; padding: 20px; border-radius: 18px; margin: 27px 0 15px 0; font-size: 1.15em;
+      box-shadow: 0 0 12px #ffe08265;
+    }
+    .footer {
+      margin-top: 22px; text-align: center; color: #666; font-size: 1.07em;
+    }
     .qr { display:block; margin:22px auto 7px auto; width:105px; border-radius:16px; box-shadow:0 0 9px #ffef8f55;}
-    button, .btn { background: #ffd43b; color:#a67200; font-size: 1.22em; border:none; border-radius:12px; padding:13px 32px; cursor:pointer; margin-top:13px; box-shadow:0 2px 12px #ffe08270; transition:0.1s; font-weight:bold;}
+    button, .btn {
+      background: #ffd43b; color:#a67200; font-size: 1.22em; border:none; border-radius:12px; padding:13px 32px; cursor:pointer;
+      margin-top:13px; box-shadow:0 2px 12px #ffe08270; transition:0.1s;
+      font-weight:bold;
+    }
     button:hover { background: #fff176; color: #e67a00;}
     .agree-label { font-weight: normal; color:#c18700; }
-    .help-tip { font-size:0.92em;color:#be9502;display:inline;margin-left:7px;}
     @media (max-width: 800px) {
       .container { max-width: 99vw; padding: 3vw 1.5vw;}
       .q-ruru-inline { width:90px;}
@@ -37,6 +73,7 @@
 </head>
 <body>
   <div class="container">
+    <!-- ==== 標題+頭貼+上三下三小小兵 ==== -->
     <div class="title-header">
       <div class="minions-row">
         <img src="minion-1.png" alt="小小兵1">
@@ -54,6 +91,7 @@
       </div>
     </div>
 
+    <!-- ==== 表單開始 ==== -->
     <form id="orderForm" autocomplete="off">
       <div class="form-section">
         <label for="nickname">暱稱（必填）</label>
@@ -86,7 +124,7 @@
         LINE Bank 銀行帳戶：824 連線商業銀行<br>
         帳號：111019874455<br>
         戶名：林芳如<br>
-        <span class="help-tip">備註範例：「小如 語聊」</span><br>
+        匯款備註請填寫「小如＋項目＋金額」以利對帳<br>
       </div>
       <div id="payRemark" style="display:none; color:#b86d00; font-size:1em; margin-bottom:12px;">
         請暫勿付款，等 Ru 回覆 Line Pay 帳號再付款哦！
@@ -106,21 +144,11 @@
         <label>上傳匯款／付款／折扣截圖（如有）</label>
         <input type="file" id="proofFile" accept="image/*,.jpg,.jpeg,.png">
       </div>
-      <!-- 星期/時段分開 -->
+      <!-- 🔥 這裡只剩一個下拉選單：直接自動顯示本週所有時間 🔥 -->
       <div class="form-section">
-        <label>預約星期</label>
-        <select id="weekday" required onchange="updateTimeblocks()">
-          <option value="">請選擇星期</option>
-          <option value="2">星期二</option>
-          <option value="3">星期三</option>
-          <option value="4">星期四</option>
-          <option value="5">星期五</option>
-          <option value="6">星期六</option>
-          <option value="7">星期日</option>
-        </select>
-        <label>預約時段</label>
+        <label>預約時間</label>
         <select id="timeblock" required>
-          <option value="">請先選星期</option>
+          <option value="">請選擇時間</option>
         </select>
       </div>
       <!-- 規則勾選 -->
@@ -166,7 +194,25 @@
     </div>
 
     <!-- 買五送二自動顯示 -->
-    <div class="order-summary" id="bonusSection" style="background:#fffbe0; display:none;"></div>
+    <div class="order-summary" id="bonusSection" style="background:#fffbe0; display:none;">
+      🎁 買五送二優惠已啟動！請選擇兩項要贈送的服務：
+      <select id="bonus1">
+        <option value="">請選擇贈送項目</option>
+        <option value="s1">傳說對決</option>
+        <option value="s2">語音通話</option>
+        <option value="s3">打字聊天</option>
+        <option value="s4">全民Party 唱歌</option>
+        <option value="s5">情感諮詢</option>
+      </select>
+      <select id="bonus2">
+        <option value="">請選擇贈送項目</option>
+        <option value="s1">傳說對決</option>
+        <option value="s2">語音通話</option>
+        <option value="s3">打字聊天</option>
+        <option value="s4">全民Party 唱歌</option>
+        <option value="s5">情感諮詢</option>
+      </select>
+    </div>
 
     <!-- LINE QR code -->
     <img src="ru-line-qr-demo.png" class="qr" alt="Line QR Code">
@@ -175,68 +221,50 @@
     </div>
   </div>
 
-  <!-- JS -->
+  <!-- JS 功能區 -->
   <script>
-    // ==== 服務時段（每週可更新）====
-    const weekTimes = {
-      "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
-      "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
-      "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
-      "5": ["23:00","23:30","00:00","00:30"],
-      "6": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30","01:00","01:30"],
-      "7": [
-        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30",
-        "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
-        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
-      ]
-    };
-    // ==== 已預約時段舉例（實際可從後端同步獲得）====
-    const reserved = {
-      // "2": ["22:00"], // 例如：星期二 22:00 已被預約
-      // "7": ["21:30"], // 例如：星期日 21:30 已被預約
+    // ========== 本週日期請每週自行更新 ========== //
+    const timeOptions = [
+      // 這裡請根據本週可預約時段更新
+      "7/16 (星期二) 00:00", "7/16 (星期二) 00:30", "7/16 (星期二) 01:00", "7/16 (星期二) 01:30",
+      "7/16 (星期二) 19:00", "7/16 (星期二) 19:30", "7/16 (星期二) 20:00", "7/16 (星期二) 20:30",
+      "7/16 (星期二) 21:00", "7/16 (星期二) 21:30", "7/16 (星期二) 22:00", "7/16 (星期二) 22:30",
+      "7/16 (星期二) 23:00", "7/16 (星期二) 23:30",
+      // ...以下請補足本週所有時間...
+    ];
+    // 自動填入時段選單
+    window.onload = function() {
+      const blockSel = document.getElementById('timeblock');
+      timeOptions.forEach(time => {
+        let opt = document.createElement('option');
+        opt.value = time;
+        opt.innerText = time;
+        blockSel.appendChild(opt);
+      });
     };
 
-    // ==== 過期時間不顯示 + 被預約不可選 ====
-    function updateTimeblocks() {
-      const week = document.getElementById('weekday').value;
-      const blockSel = document.getElementById('timeblock');
-      blockSel.innerHTML = '<option value="">請選擇時段</option>';
-      if (!weekTimes[week]) return;
-      const now = new Date();
-      let today = now.getDay(); if(today===0) today=7;
-      let isToday = parseInt(week,10)===today;
-      weekTimes[week].forEach(time => {
-        let [hh,mm]=time.split(":").map(Number);
-        let option = document.createElement('option');
-        option.value = time;
-        option.innerText = time;
-        // 已預約
-        if (reserved[week] && reserved[week].includes(time)) {
-          option.disabled = true; option.innerText += "（已預約）";
-        }
-        // 過期（今日之前或今日已過時段）
-        if ((parseInt(week,10)<today) || (isToday && (hh<now.getHours()||(hh===now.getHours()&&mm<=now.getMinutes())))) {
-          option.disabled = true; option.innerText += "（已結束）";
-        }
-        blockSel.appendChild(option);
-      });
-    }
-    // 折扣金切換
     function toggleDiscountProof() {
       const discount = document.getElementById('discount').value;
-      document.getElementById('discountProof').style.display = discount === "0" ? "none" : "block";
-      document.getElementById('discountProofLabel').style.display = discount === "0" ? "none" : "block";
+      const proof = document.getElementById('discountProof');
+      const label = document.getElementById('discountProofLabel');
+      if (discount === "0") {
+        proof.style.display = "none";
+        label.style.display = "none";
+      } else {
+        proof.style.display = "block";
+        label.style.display = "block";
+      }
     }
-    // 付款方式切換
     function onPayTypeChange() {
       const payType = document.getElementById('payType').value;
       document.getElementById('bankInfo').style.display = (payType==="bank") ? "" : "none";
       document.getElementById('payRemark').style.display = (payType==="linepay") ? "" : "none";
     }
-    // 金額自動計算 & 買五送二
     function calcAll() {
       let price = [200,250,200,100,200];
-      let items = [], subtotal = 0, singles = 0;
+      let items = [];
+      let subtotal = 0;
+      let singles = 0;
       for(let i=1;i<=5;i++){
         let v = parseInt(document.getElementById('s'+i).value)||0;
         if(v>0){
@@ -253,13 +281,12 @@
       document.getElementById('donateTxt').innerText = donate;
       let total = subtotal - discount + donate;
       document.getElementById('total').innerText = total<0?0:total;
-      document.getElementById('showTime').innerText =
-        (getWeekdayStr(document.getElementById('weekday').value) || '') +
-        (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : '');
-      // 買五送二（N送N*2）
+      document.getElementById('showTime').innerText = document.getElementById('timeblock').value || "";
+      // 買五送二邏輯，買十送四、十五送六...
       let bonus = document.getElementById('bonusSection');
       let bonusCount = Math.floor(singles / 5) * 2;
       if (bonusCount > 0) {
+        bonus.style.display = '';
         let selectHTML = '';
         for (let i = 1; i <= bonusCount; i++) {
           selectHTML +=
@@ -272,24 +299,23 @@
               <option value="s5">情感諮詢</option>
             </select>`;
         }
-        bonus.style.display = '';
-        bonus.innerHTML = `🎁 已達買${Math.floor(singles/5)*5}送${bonusCount}優惠！請任選贈送的服務：<br>${selectHTML}`;
+        bonus.innerHTML =
+          `🎁 已達買${Math.floor(singles/5)*5}送${bonusCount}優惠！請選擇贈送的服務：<br>${selectHTML}`;
       } else {
         bonus.style.display = 'none';
       }
     }
-    function getWeekdayStr(num) {
-      switch(num) {
-        case '2': return '星期二'; case '3': return '星期三'; case '4': return '星期四'; case '5': return '星期五'; case '6': return '星期六'; case '7': return '星期日';
-        default: return '';
-      }
-    }
-    // 訂單送出
     document.getElementById("orderForm").onsubmit = function(event){
       event.preventDefault();
-      if (!document.getElementById("agreeRule").checked) { alert("請勾選同意服務規則！"); return; }
+      if (!document.getElementById("agreeRule").checked) {
+        alert("請勾選同意服務規則！");
+        return;
+      }
       let singles = 0;
-      for(let i=1;i<=5;i++){ singles += parseInt(document.getElementById('s'+i).value)||0; }
+      for(let i=1;i<=5;i++){
+        singles += parseInt(document.getElementById('s'+i).value)||0;
+      }
+      // collect bonus selected values
       let bonusVals = [];
       let bonusCount = Math.floor(singles / 5) * 2;
       for (let i = 1; i <= bonusCount; i++) {
@@ -299,7 +325,7 @@
       let formData = {
         nickname: document.getElementById('nickname').value,
         payType: document.getElementById('payType').value,
-        time: (getWeekdayStr(document.getElementById('weekday').value) + " " + document.getElementById('timeblock').value),
+        time: document.getElementById('timeblock').value,
         items: document.getElementById('showItems').innerText,
         subtotal: document.getElementById('subtotalTxt').innerText,
         discount: document.getElementById('discountTxt').innerText,
@@ -307,7 +333,7 @@
         bonus: bonusVals.join(','),
         donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
       };
-      fetch("https://script.google.com/macros/s/AKfycbxO3DHC8HC9SUFTjJdtmjTjkABhmo127CPWh1tyQmkieroj6g6tYuIjExRn_ZFFYTeA/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwpn7y3UJyDlVyFH0pPakvih4fnhBg1sVTBubkR_bp889PiN2vnUgFSlAP1n2Hx52yU/exec", {
         method: "POST",
         body: JSON.stringify(formData),
         headers: { "Content-Type": "application/json" }
