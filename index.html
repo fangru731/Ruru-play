@@ -295,53 +295,54 @@
         bonus.style.display = 'none';
       }
     }
-    // ====== 表單送出 ======
-    document.getElementById("orderForm").onsubmit = function(event){
-      event.preventDefault();
-      if (!document.getElementById("agreeRule").checked) {
-        alert("請勾選同意服務規則！");
-        return;
-      }
-      let singles = 0;
-      for(let i=1;i<=5;i++){
-        singles += parseInt(document.getElementById('s'+i).value)||0;
-      }
-      // collect bonus selected values
-      let bonusVals = [];
-      let bonusCount = Math.floor(singles / 5) * 2;
-      for (let i = 1; i <= bonusCount; i++) {
-        let sel = document.getElementById(`bonus${i}`);
-        if (sel && sel.value) bonusVals.push(sel.value);
-      }
-      let formData = {
-        nickname: document.getElementById('nickname').value,
-        payType: document.getElementById('payType').value,
-        time: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : ''),
-        items: document.getElementById('showItems').innerText,
-        subtotal: document.getElementById('subtotalTxt').innerText,
-        discount: document.getElementById('discountTxt').innerText,
-        donate: document.getElementById('donateTxt').innerText,
-        bonus: bonusVals.join(','),
-        donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
-      };
-      fetch("https://script.google.com/macros/s/AKfycbzSBpDlD0oI3mtLS1dMZ1j4lRDL2H9RpFUVnXyXwD8jzsEXe6Ji1t5GYAPXwdVs9wdT/exec", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" }
-      }).then(r=>r.text()).then(res=>{
-        if(res.indexOf("success")>=0){
-          alert('預約成功！請於一小時內完成付款並將匯款截圖或付款證明上傳至官方LINE，未完成付款視同放棄本時段。');
-          document.getElementById('orderForm').reset();
-          calcAll();
-        }else if(res.indexOf("黑名單")>=0){
-          alert("你已被加入黑名單，無法預約！");
-        }else{
-          alert('此時段已被預約，請重新選擇！');
-        }
-      }).catch(e=>{
-        alert('送出失敗，請聯絡Ru！');
-      });
+   // ====== 表單送出 ======
+  document.getElementById("orderForm").onsubmit = function(event){
+    event.preventDefault();
+    if (!document.getElementById("agreeRule").checked) {
+      alert("請勾選同意服務規則！");
+      return;
+    }
+    let singles = 0;
+    for(let i=1;i<=5;i++){
+      singles += parseInt(document.getElementById('s'+i).value)||0;
+    }
+    // collect bonus selected values
+    let bonusVals = [];
+    let bonusCount = Math.floor(singles / 5) * 2;
+    for (let i = 1; i <= bonusCount; i++) {
+      let sel = document.getElementById(`bonus${i}`);
+      if (sel && sel.value) bonusVals.push(sel.value);
+    }
+    let formData = {
+      nickname: document.getElementById('nickname').value,
+      payType: document.getElementById('payType').value,
+      time: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : ''),
+      items: document.getElementById('showItems').innerText,
+      subtotal: document.getElementById('subtotalTxt').innerText,
+      discount: document.getElementById('discountTxt').innerText,
+      donate: document.getElementById('donateTxt').innerText,
+      total: document.getElementById('total').innerText,   // 一定要有這一行
+      bonus: bonusVals.join(','),
+      donateMsg: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
     };
-  </script>
-</body>
-</html>
+    fetch("【https://script.google.com/macros/s/AKfycbzSBpDlD0oI3mtLS1dMZ1j4lRDL2H9RpFUVnXyXwD8jzsEXe6Ji1t5GYAPXwdVs9wdT/exec】", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" }
+    }).then(r=>r.text()).then(res=>{
+      if(res.indexOf("success")>=0){
+        alert('預約成功！請於一小時內完成付款並將匯款截圖或付款證明上傳至官方LINE，未完成付款視同放棄本時段。');
+        document.getElementById('orderForm').reset();
+        calcAll();
+      }else if(res.indexOf("黑名單")>=0){
+        alert("你已被加入黑名單，無法預約！");
+      }else if(res.indexOf("此時段已被預約")>=0){
+        alert('此時段已被預約，請重新選擇！');
+      }else{
+        alert('送出失敗，請聯絡Ru！');
+      }
+    }).catch(e=>{
+      alert('送出失敗，請聯絡Ru！');
+    });
+  };
+</script>
