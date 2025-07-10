@@ -173,64 +173,55 @@
   </div>
   <!-- JS 功能區 -->
   <script>
-    // ==== 動態時段表(每週請你更新weekSlots) ====
-    const weekSlots = {
-      "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
-      "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
-      "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
-      "5": ["23:00","23:30","00:00","00:30"],
-      "6": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30","01:00","01:30"],
-      "7": [
-        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
-        "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
-        "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
-        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
-      ]
-    };
+  // 週時段設定
+const weekSlots = {
+  "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
+  "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
+  "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
+  "5": ["23:00","23:30","00:00","00:30"],
+  "6": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30","01:00","01:30"],
+  "7": [
+    "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
+    "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30",
+    "10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+    "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
+  ]
+};
 
-    // ==== 「已預約時段」請你自己每次塞進去 ====
-    const reserved = [
-      // 範例：{weekday:"2", time:"19:30"}
-      // 實際用法你每週手動維護
-      // {weekday:"2", time:"19:30"}, {weekday:"3", time:"23:00"}
-    ];
+function pad0(n){ return n<10?"0"+n:n;}
+function getToday(){
+  let d = new Date();
+  let wd = d.getDay();
+  return wd===0?7:wd;
+}
 
-    function pad0(n){ return n<10?"0"+n:n;}
-    // 自動判斷今天星期（週一為1，週日為0）
-    function getToday(){
-      let d = new Date();
-      let wd = d.getDay();
-      return wd===0?7:wd;
-    }
+function updateTimeblocks() {
+  const day = document.getElementById('weekday').value;
+  const blockSel = document.getElementById('timeblock');
+  blockSel.innerHTML = '<option value="">請選擇時間</option>';
+  if (!weekSlots[day]) return;
+  let today = getToday();
+  let nowHM = pad0(new Date().getHours())+":"+pad0(new Date().getMinutes());
+  weekSlots[day].forEach(time => {
+    let disabled = false;
+    if (Number(day)<today) disabled = true;
+    if (Number(day)===today && time<=nowHM) disabled = true;
+    let opt = document.createElement('option');
+    opt.value = time;
+    opt.innerText = (disabled?"[已被預約/已過] ":"")+time;
+    if (disabled) opt.disabled = true;
+    blockSel.appendChild(opt);
+  });
+  document.getElementById("timeNotice").style.display="block";
+  document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
+}
 
-    // 動態顯示可預約時段
-    function updateTimeblocks() {
-      const day = document.getElementById('weekday').value;
-      const blockSel = document.getElementById('timeblock');
-      blockSel.innerHTML = '<option value="">請選擇時間</option>';
-      if (!weekSlots[day]) return;
-      // 判斷已過日子/時段/已預約
-      let today = getToday();
-      let nowHM = pad0(new Date().getHours())+":"+pad0(new Date().getMinutes());
-      weekSlots[day].forEach(time => {
-        let disabled = false;
-        // 已過的星期不可選
-        if (Number(day)<today) disabled = true;
-        // 當天只保留未來時段
-        if (Number(day)===today && time<=nowHM) disabled = true;
-        // 已預約時段
-        if (reserved.some(x=>x.weekday==day && x.time==time)) disabled = true;
-        let opt = document.createElement('option');
-        opt.value = time;
-        opt.innerText = (disabled?"[已被預約/已過] ":"")+time;
-        if (disabled) opt.disabled = true;
-        blockSel.appendChild(opt);
-      });
-      document.getElementById("timeNotice").style.display="block";
-      document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
-    }
-    document.getElementById('weekday').addEventListener('change', updateTimeblocks);
-
+// ====== 綁定 change 事件（放最下面！）======
+window.onload = function(){
+  document.getElementById('weekday').addEventListener('change', updateTimeblocks);
+  // 預設如果頁面一開始就有選星期，也直接跑一次
+  updateTimeblocks();
+}
     // ====== 折扣金截圖上傳切換 ======
     function toggleDiscountProof() {
       const discount = document.getElementById('discount').value;
