@@ -27,6 +27,11 @@
     .agree-label { font-weight: normal; color:#c18700; }
     .notice {background:#fffbe0; color:#b8860b; border-radius:10px; border:1px solid #ffe082; padding:9px 13px; margin-bottom:14px; font-size:1em;}
     .disabled { color: #aaa !important;}
+    .query-btn { background: #e8f5e8; color: #2e7d32; font-size: 1.1em; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer; margin: 5px; transition: 0.2s; }
+    .query-btn:hover { background: #c8e6c8; }
+    .query-btn.orange { background: #fff3e0; color: #ef6c00; }
+    .query-btn.orange:hover { background: #ffe0b2; }
+    .vip-section { background: #f3e5f5; border: 1px solid #e1bee7; border-radius: 8px; padding: 12px; margin-top: 10px; }
     @media (max-width: 800px) {
       .container { max-width: 99vw; padding: 3vw 1.5vw;}
       .q-ruru-inline { width:90px;}
@@ -90,10 +95,10 @@
         匯款備註請填寫「小如＋項目＋金額」以利對帳<br>
       </div>
       <div id="payRemark" style="display:none; color:#b86d00; font-size:1em; margin-bottom:12px;">
-        請暫勿付款，等 Ru 回覆 Line Pay 帳號再付款哦！
+        ⚠️ 請暫勿付款，等 Ru 回覆 Line Pay 帳號再付款哦！付款前請先加入官方LINE確認。
       </div>
       <div class="form-section">
-        <label>折扣金</label>
+        <label>折扣金（每種優惠僅限使用一次）</label>
         <select id="discount" onchange="toggleDiscountProof()">
           <option value="0">不使用折扣</option>
           <option value="50">分享折扣 $50</option>
@@ -104,6 +109,19 @@
         <label id="discountProofLabel" style="margin-bottom:0; color:#bb8600; display:none;">請上傳折扣金截圖證明</label>
       </div>
       <div class="form-section">
+        <label><input type="checkbox" id="vipCheck" onchange="toggleVipSection()"> <span class="checkbox-label">我是存單制會員（買五送二）</span></label>
+        <div id="vipSection" class="vip-section" style="display:none;">
+          <label>目前剩餘次數：</label>
+          <input type="number" id="remainingCount" min="0" max="99" value="0" style="width:80px;" placeholder="0">
+          <span class="checkbox-label">單</span>
+        </div>
+      </div>
+      <div class="form-section">
+        <label>匯款備註欄位</label>
+        <input type="text" id="bankRemark" maxlength="50" placeholder="建議格式：小如 語聊">
+        <div style="color:#a67200; font-size:0.9em; margin-top:5px;">💡 建議格式：暱稱 + 項目，例如：小如 語聊</div>
+      </div>
+      <div class="form-section">
         <label>上傳匯款／付款／折扣截圖（如有，若手機無法上傳請直接傳官方LINE）</label>
         <input type="file" id="proofFile" accept="image/*,.jpg,.jpeg,.png" multiple>
       </div>
@@ -112,6 +130,7 @@
         <label>預約時間（已預約／已過時段會顯示不可選）</label>
         <select id="weekday" required>
           <option value="">請選擇星期</option>
+          <option value="1">星期一</option>
           <option value="2">星期二</option>
           <option value="3">星期三</option>
           <option value="4">星期四</option>
@@ -120,7 +139,7 @@
           <option value="7">星期日</option>
         </select>
         <select id="timeblock" required>
-          <option value="">請先選星期</option>
+          <option value="">請選擇時段</option>
         </select>
         <div id="timeNotice" class="notice" style="display:none;"></div>
       </div>
@@ -152,6 +171,8 @@
       </div>
       <div class="form-section" style="text-align:center;">
         <button type="button" onclick="calcAll()">計算應付金額</button>
+        <button type="button" onclick="queryPoints()" class="query-btn">查詢點數</button>
+        <button type="button" onclick="queryRemaining()" class="query-btn orange">查剩餘單數</button>
         <button type="submit" class="btn">完成預約並送出</button>
       </div>
     </form>
@@ -175,6 +196,7 @@
   <script>
   // 週時段設定
 const weekSlots = {
+  "1": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
   "2": ["00:00","00:30","01:00","01:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"],
   "3": ["23:00","23:30","00:00","00:30","01:00","01:30"],
   "4": ["19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","00:00","00:30"],
@@ -215,13 +237,6 @@ function updateTimeblocks() {
   document.getElementById("timeNotice").style.display="block";
   document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
 }
-
-// ====== 綁定 change 事件（放最下面！）======
-window.onload = function(){
-  document.getElementById('weekday').addEventListener('change', updateTimeblocks);
-  // 預設如果頁面一開始就有選星期，也直接跑一次
-  updateTimeblocks();
-}
     // ====== 折扣金截圖上傳切換 ======
     function toggleDiscountProof() {
       const discount = document.getElementById('discount').value;
@@ -239,6 +254,30 @@ window.onload = function(){
       const payType = document.getElementById('payType').value;
       document.getElementById('bankInfo').style.display = (payType==="bank") ? "" : "none";
       document.getElementById('payRemark').style.display = (payType==="linepay") ? "" : "none";
+    }
+    
+    function toggleVipSection() {
+      const vipCheck = document.getElementById('vipCheck').checked;
+      const vipSection = document.getElementById('vipSection');
+      vipSection.style.display = vipCheck ? "block" : "none";
+    }
+    
+    function queryPoints() {
+      const nickname = document.getElementById('nickname').value;
+      if (!nickname) {
+        alert('請先填入暱稱再查詢！');
+        return;
+      }
+      alert(`查詢功能開發中，請聯繫 Ru 手動查詢您的點數。\n暱稱：${nickname}`);
+    }
+    
+    function queryRemaining() {
+      const nickname = document.getElementById('nickname').value;
+      if (!nickname) {
+        alert('請先填入暱稱再查詢！');
+        return;
+      }
+      alert(`查詢功能開發中，請聯繫 Ru 手動查詢您的剩餘單數。\n暱稱：${nickname}`);
     }
     function calcAll() {
       let price = [200,250,200,100,200];
@@ -315,7 +354,10 @@ document.getElementById("orderForm").onsubmit = function(event){
     total: document.getElementById('total').innerText,
     bonus: bonusVals.join(','),   // 對應「贈送項目」
     singles: singles,             // 幾單（點數計算會更穩定）
-    remark: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : ""
+    remark: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : "",
+    bankRemark: document.getElementById('bankRemark').value,
+    isVip: document.getElementById('vipCheck').checked,
+    remainingCount: document.getElementById('vipCheck').checked ? (document.getElementById('remainingCount').value || 0) : 0
   };
   fetch("https://script.google.com/macros/s/AKfycbzYuYrOJnX5vh4mltttl55fUQud3fqZloq_DONyXBVnKkXPr5uPTrSz0oJ6tidJmuFx/exec", {
     method: "POST",
@@ -337,3 +379,13 @@ document.getElementById("orderForm").onsubmit = function(event){
     alert('送出失敗，請聯絡Ru！');
   });
 };
+
+// ====== 綁定 change 事件（放最下面！）======
+window.onload = function(){
+  document.getElementById('weekday').addEventListener('change', updateTimeblocks);
+  // 預設如果頁面一開始就有選星期，也直接跑一次
+  updateTimeblocks();
+}
+  </script>
+</body>
+</html>
