@@ -359,7 +359,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     isVip: document.getElementById('vipCheck').checked,
     remainingCount: document.getElementById('vipCheck').checked ? (document.getElementById('remainingCount').value || 0) : 0
   };
-  fetch("https://script.google.com/macros/s/AKfycbxtKLhjzETEEbyYAc_29tFmZ5OtbgrtsBJT2mpvMhl7DWjaQMA4h3EwQ4UbeZN7QK_eAA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxEyhU35K8y2LfoCTKxdWDQfDpRortRReEdYsQFzLJPJuuUX08RN59iY3vr4Gw4yolEFw/exe", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: { "Content-Type": "application/json" }
