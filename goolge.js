@@ -34,30 +34,31 @@ function processFormData(data) {
     
     const timestamp = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
     
-    // 根據新表格結構準備資料
+    // 根據新表格結構準備資料 - 確保正確轉換資料型別
     const rowData = [
-      orderNumber,                          // A: 訂單編號
-      timestamp,                            // B: 提交時間
-      data.contactMethod || '',             // C: 聯絡方式
-      data.contactId || '',                 // D: 聯絡ID
-      parseInt(data.legendCount) || 0,      // E: 傳說對決數量
-      parseInt(data.voiceCount) || 0,       // F: 語音通話數量
-      parseInt(data.chatCount) || 0,        // G: 打字聊天數量
-      parseInt(data.partyCount) || 0,       // H: 全民Party唱歌數量
-      parseInt(data.consultCount) || 0,     // I: 情感諮詢數量
-      data.weekday || '',                   // J: 預約星期
-      data.timeSlot || '',                  // K: 預約時段
-      data.fullDateTime || '',              // L: 完整預約時間
-      data.selectedItems || '',             // M: 所選項目
-      parseInt(data.subtotal) || 0,         // N: 服務金額小計
-      parseInt(data.total) || 0,            // O: 最終應付金額
-      '待付款',                             // P: 付款狀態
-      '待服務',                             // Q: 服務狀態
-      data.remark || ''                     // R: 備註
+      orderNumber,                               // A: 訂單編號
+      timestamp,                                 // B: 提交時間
+      String(data.contactMethod || ''),          // C: 聯絡方式
+      String(data.contactId || ''),              // D: 聯絡ID
+      parseInt(String(data.legendCount)) || 0,   // E: 傳說對決數量
+      parseInt(String(data.voiceCount)) || 0,    // F: 語音通話數量
+      parseInt(String(data.chatCount)) || 0,     // G: 打字聊天數量
+      parseInt(String(data.partyCount)) || 0,    // H: 全民Party唱歌數量
+      parseInt(String(data.consultCount)) || 0,  // I: 情感諮詢數量
+      String(data.weekday || ''),                // J: 預約星期
+      String(data.timeSlot || ''),               // K: 預約時段
+      String(data.fullDateTime || ''),           // L: 完整預約時間
+      String(data.selectedItems || ''),          // M: 所選項目
+      parseInt(String(data.subtotal)) || 0,      // N: 服務金額小計
+      parseInt(String(data.total)) || 0,         // O: 最終應付金額
+      '待付款',                                  // P: 付款狀態
+      '待服務',                                  // Q: 服務狀態
+      String(data.remark || '')                  // R: 備註
     ];
 
+    console.log('準備寫入的資料:', rowData);
     sheet.appendRow(rowData);
-    console.log('資料已寫入工作表');
+    console.log('資料已寫入工作表，行數:', sheet.getLastRow());
 
     return ContentService.createTextOutput('success').setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
