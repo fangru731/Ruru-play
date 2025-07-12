@@ -1,9 +1,5 @@
 // 處理 POST 請求
 function doPost(e) {
-  // 設定 CORS
-  const response = handleCORS();
-  if (response) return response;
-  
   try {
     const SHEET_ID = '11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
@@ -16,7 +12,7 @@ function doPost(e) {
       for (let i = 1; i < blacklistData.length; i++) {
         // 根據新表格結構，聯絡ID在D欄(索引3)
         if (blacklistData[i][3] === data.contactId) {
-          return createCORSResponse('黑名單');
+          return ContentService.createTextOutput('黑名單').setMimeType(ContentService.MimeType.JSON);
         }
       }
     }
@@ -26,7 +22,7 @@ function doPost(e) {
     for (let i = 1; i < existingData.length; i++) {
       // J欄(索引9)是預約星期，K欄(索引10)是預約時段
       if (existingData[i][9] === data.weekday && existingData[i][10] === data.timeSlot) {
-        return createCORSResponse('此時段已被預約');
+        return ContentService.createTextOutput('此時段已被預約').setMimeType(ContentService.MimeType.JSON);
       }
     }
 
@@ -62,34 +58,15 @@ function doPost(e) {
 
     sheet.appendRow(rowData);
 
-    return createCORSResponse('success');
+    return ContentService.createTextOutput('success').setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     console.error('錯誤詳情:', err);
-    return createCORSResponse('error: ' + err.message);
+    return ContentService.createTextOutput('error: ' + err.message).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 // 用於 GET 測試
 function doGet(e) {
-  // 設定 CORS
-  const response = handleCORS();
-  if (response) return response;
-  
-  return createCORSResponse('Google Apps Script 運作正常');
+  return ContentService.createTextOutput('Google Apps Script 運作正常').setMimeType(ContentService.MimeType.JSON);
 }
 
-// 處理 CORS 預檢請求
-function handleCORS() {
-  // 這個函數不需要內容，因為 Google Apps Script 會自動處理 OPTIONS 請求
-  return null;
-}
-
-// 建立帶有 CORS 標頭的回應
-function createCORSResponse(data) {
-  const output = typeof data === 'string' ? data : JSON.stringify(data);
-  
-  return ContentService
-    .createTextOutput(output)
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader("Access-Control-Allow-Origin", "https://fangru731.github.io");
-}
