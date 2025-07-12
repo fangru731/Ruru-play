@@ -3,7 +3,7 @@ function processFormData(data) {
   console.log('處理表單資料:', data);
   try {
     const SHEET_ID = '11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM';
-    const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
+    const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('訂單');
 
     // 黑名單檢查
     const blacklistSheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('黑名單');
