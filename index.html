@@ -279,7 +279,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     total: parseInt(document.getElementById('total').innerText) || 0,
     remark: ''
   };
-  fetch("https://script.google.com/macros/s/AKfycbzGhVqs1VhuxHx49frfjPug83DhbDE9JL1rBmz8ryHKkx4lx8Wm2bO0mP0x81_pa2jb/exec" + Date.now(), {
+  fetch("https://script.google.com/macros/s/AKfycbwUJKOBAa_mAJkpaSWypCMi3l5I2KEVLOoT_Zvr7MneDMfSlBNJkaiTXWQ7M1gzcfEl/exec" + Date.now(), {
     method: "POST",
     body: JSON.stringify(formData),
     headers: { "Content-Type": "text/plain" },
