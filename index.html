@@ -62,8 +62,17 @@
     </div>
     <form id="orderForm" autocomplete="off">
       <div class="form-section">
-        <label for="nickname">暱稱（必填）</label>
-        <input type="text" id="nickname" maxlength="12" required placeholder="請填你的暱稱">
+        <label for="contactMethod">聯絡方式（必選）</label>
+        <select id="contactMethod" required onchange="showContactInput()">
+          <option value="">請選擇聯絡方式</option>
+          <option value="discord">Discord</option>
+          <option value="instagram">Instagram</option>
+          <option value="line">LINE</option>
+        </select>
+      </div>
+      <div class="form-section" id="contactInputSection" style="display:none;">
+        <label for="contactId" id="contactLabel">聯絡 ID（必填）</label>
+        <input type="text" id="contactId" maxlength="30" required placeholder="請填寫您的 ID">
       </div>
       <div class="form-section">
         <label>陪玩項目（可複選＋填單數）</label>
@@ -73,57 +82,7 @@
           <input type="number" id="s3" min="0" max="99" value="0" style="width:64px;"> <span class="checkbox-label">打字聊天（$200/30分）</span><br>
           <input type="number" id="s4" min="0" max="99" value="0" style="width:64px;"> <span class="checkbox-label">全民Party 唱歌（$100/首）</span><br>
           <input type="number" id="s5" min="0" max="99" value="0" style="width:64px;"> <span class="checkbox-label">情感諮詢（$200/30分）</span><br>
-          <input type="checkbox" id="donateCheck" onchange="document.getElementById('donateAmt').style.display=this.checked?'inline':'none';document.getElementById('donateMsg').style.display=this.checked?'block':'none';"> <span class="checkbox-label">贊助支持（抖內）</span>
-          <input type="number" id="donateAmt" min="0" max="99999" value="0" style="width:100px; display:none;" placeholder="自填金額">
-          <input type="text" id="donateMsg" style="width:220px; display:none;" maxlength="32" placeholder="給Ru的話">
         </div>
-      </div>
-      <div class="form-section">
-        <label>付款方式（必選）</label>
-        <select id="payType" required onchange="onPayTypeChange()">
-          <option value="">請選擇</option>
-          <option value="linepay">Line Pay</option>
-          <option value="bank">匯款轉帳</option>
-        </select>
-      </div>
-      <!-- 匯款資訊區塊 -->
-      <div id="bankInfo" style="display:none; background:#fffde5; border:1.2px solid #ffe082; border-radius:10px; padding:11px 16px 11px 16px; color:#a36b00; margin-bottom:10px; font-size:1em;">
-        <b>匯款資訊：</b><br>
-        LINE Bank 銀行帳戶：824 連線商業銀行<br>
-        帳號：111019874455<br>
-        戶名：林芳如<br>
-        匯款備註請填寫「小如＋項目＋金額」以利對帳<br>
-      </div>
-      <div id="payRemark" style="display:none; color:#b86d00; font-size:1em; margin-bottom:12px;">
-        ⚠️ 請暫勿付款，等 Ru 回覆 Line Pay 帳號再付款哦！付款前請先加入官方LINE確認。
-      </div>
-      <div class="form-section">
-        <label>折扣金（每種優惠僅限使用一次）</label>
-        <select id="discount" onchange="toggleDiscountProof()">
-          <option value="0">不使用折扣</option>
-          <option value="50">分享折扣 $50</option>
-          <option value="30">推薦好友折扣 $30</option>
-          <option value="30">追蹤 IG 折扣 $30</option>
-        </select>
-        <input type="file" id="discountProof" accept="image/*,.jpg,.jpeg,.png" style="margin-top:7px;display:none;">
-        <label id="discountProofLabel" style="margin-bottom:0; color:#bb8600; display:none;">請上傳折扣金截圖證明</label>
-      </div>
-      <div class="form-section">
-        <label><input type="checkbox" id="vipCheck" onchange="toggleVipSection()"> <span class="checkbox-label">我是存單制會員（買五送二）</span></label>
-        <div id="vipSection" class="vip-section" style="display:none;">
-          <label>目前剩餘次數：</label>
-          <input type="number" id="remainingCount" min="0" max="99" value="0" style="width:80px;" placeholder="0">
-          <span class="checkbox-label">單</span>
-        </div>
-      </div>
-      <div class="form-section">
-        <label>匯款備註欄位</label>
-        <input type="text" id="bankRemark" maxlength="50" placeholder="建議格式：小如 語聊">
-        <div style="color:#a67200; font-size:0.9em; margin-top:5px;">💡 建議格式：暱稱 + 項目，例如：小如 語聊</div>
-      </div>
-      <div class="form-section">
-        <label>上傳匯款／付款／折扣截圖（如有，若手機無法上傳請直接傳官方LINE）</label>
-        <input type="file" id="proofFile" accept="image/*,.jpg,.jpeg,.png" multiple>
       </div>
       <!-- 🔥 預約時間（動態判斷星期、已預約）🔥 -->
       <div class="form-section">
@@ -170,9 +129,6 @@
         <label class="agree-label"><input type="checkbox" id="agreeRule" required> 我已詳細閱讀並同意上述《Ru 的陪玩注意事項與服務規則》（必須勾選）</label>
       </div>
       <div class="form-section" style="text-align:center;">
-        <button type="button" onclick="calcAll()">計算應付金額</button>
-        <button type="button" onclick="queryPoints()" class="query-btn">查詢點數</button>
-        <button type="button" onclick="queryRemaining()" class="query-btn orange">查剩餘單數</button>
         <button type="submit" class="btn">完成預約並送出</button>
       </div>
     </form>
@@ -182,12 +138,8 @@
       <b>預約時間：</b><span id="showTime"></span><br>
       <b>所選項目：</b><span id="showItems"></span><br>
       <b>服務金額小計：</b><span id="subtotalTxt">0</span> 元<br>
-      <b>折扣金額：</b><span id="discountTxt">0</span> 元<br>
-      <b>贊助金額：</b><span id="donateTxt">0</span> 元<br>
       <b>最終應付金額：</b><span id="total">0</span> 元
     </div>
-    <!-- 買五送二自動顯示 -->
-    <div class="order-summary" id="bonusSection" style="background:#fffbe0; display:none;"></div>
     <!-- LINE QR code -->
     <img src="ru-line-qr-demo.png" class="qr" alt="Line QR Code">
     <div class="footer">加我官方 LINE 聯繫喔！</div>
@@ -237,48 +189,37 @@ function updateTimeblocks() {
   document.getElementById("timeNotice").style.display="block";
   document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
 }
-    // ====== 折扣金截圖上傳切換 ======
-    function toggleDiscountProof() {
-      const discount = document.getElementById('discount').value;
-      const proof = document.getElementById('discountProof');
-      const label = document.getElementById('discountProofLabel');
-      if (discount === "0") {
-        proof.style.display = "none";
-        label.style.display = "none";
+    // 顯示聯絡方式輸入欄位
+    function showContactInput() {
+      const contactMethod = document.getElementById('contactMethod').value;
+      const contactInputSection = document.getElementById('contactInputSection');
+      const contactLabel = document.getElementById('contactLabel');
+      const contactId = document.getElementById('contactId');
+      
+      if (contactMethod) {
+        contactInputSection.style.display = 'block';
+        contactId.required = true;
+        
+        switch (contactMethod) {
+          case 'discord':
+            contactLabel.textContent = 'Discord ID（必填）';
+            contactId.placeholder = '請填寫您的 Discord ID，例如：username#1234';
+            break;
+          case 'instagram':
+            contactLabel.textContent = 'Instagram ID（必填）';
+            contactId.placeholder = '請填寫您的 Instagram ID，例如：@username';
+            break;
+          case 'line':
+            contactLabel.textContent = 'LINE ID（必填）';
+            contactId.placeholder = '請填寫您的 LINE ID，例如：@username';
+            break;
+        }
       } else {
-        proof.style.display = "block";
-        label.style.display = "block";
+        contactInputSection.style.display = 'none';
+        contactId.required = false;
       }
     }
-    function onPayTypeChange() {
-      const payType = document.getElementById('payType').value;
-      document.getElementById('bankInfo').style.display = (payType==="bank") ? "" : "none";
-      document.getElementById('payRemark').style.display = (payType==="linepay") ? "" : "none";
-    }
     
-    function toggleVipSection() {
-      const vipCheck = document.getElementById('vipCheck').checked;
-      const vipSection = document.getElementById('vipSection');
-      vipSection.style.display = vipCheck ? "block" : "none";
-    }
-    
-    function queryPoints() {
-      const nickname = document.getElementById('nickname').value;
-      if (!nickname) {
-        alert('請先填入暱稱再查詢！');
-        return;
-      }
-      alert(`查詢功能開發中，請聯繫 Ru 手動查詢您的點數。\n暱稱：${nickname}`);
-    }
-    
-    function queryRemaining() {
-      const nickname = document.getElementById('nickname').value;
-      if (!nickname) {
-        alert('請先填入暱稱再查詢！');
-        return;
-      }
-      alert(`查詢功能開發中，請聯繫 Ru 手動查詢您的剩餘單數。\n暱稱：${nickname}`);
-    }
     function calcAll() {
       let price = [200,250,200,100,200];
       let items = [];
@@ -294,36 +235,10 @@ function updateTimeblocks() {
       }
       document.getElementById('showItems').innerText = items.join('、')||'無';
       document.getElementById('subtotalTxt').innerText = subtotal;
-      let discount = parseInt(document.getElementById('discount').value)||0;
-      document.getElementById('discountTxt').innerText = discount;
-      let donate = document.getElementById('donateCheck').checked ? (parseInt(document.getElementById('donateAmt').value)||0) : 0;
-      document.getElementById('donateTxt').innerText = donate;
-      let total = subtotal - discount + donate;
-      document.getElementById('total').innerText = total<0?0:total;
+      document.getElementById('total').innerText = subtotal;
       document.getElementById('showTime').innerText =
         (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') +
         (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : '');
-      // 買五送二邏輯(5單2贈，10單4贈...)
-      let bonus = document.getElementById('bonusSection');
-      let bonusCount = Math.floor(singles / 5) * 2;
-      if (bonusCount > 0) {
-        bonus.style.display = '';
-        let selectHTML = '';
-        for (let i = 1; i <= bonusCount; i++) {
-          selectHTML +=
-            `<select id="bonus${i}" style="margin-right:9px;margin-top:7px;">
-              <option value="">請選擇贈送項目</option>
-              <option value="s1">傳說對決</option>
-              <option value="s2">語音通話</option>
-              <option value="s3">打字聊天</option>
-              <option value="s4">全民Party 唱歌</option>
-              <option value="s5">情感諮詢</option>
-            </select>`;
-        }
-        bonus.innerHTML = `🎁 已達買${Math.floor(singles/5)*5}送${bonusCount}優惠！請選擇贈送的服務：<br>${selectHTML}`;
-      } else {
-        bonus.style.display = 'none';
-      }
     }
   // ====== 表單送出 ======
 document.getElementById("orderForm").onsubmit = function(event){
@@ -332,37 +247,42 @@ document.getElementById("orderForm").onsubmit = function(event){
     alert("請勾選同意服務規則！");
     return;
   }
-  let singles = 0;
-  for(let i=1;i<=5;i++){
-    singles += parseInt(document.getElementById('s'+i).value)||0;
+  // 檢查至少有一個項目數量是 1 或以上
+  let hasItems = false;
+  for(let i=1; i<=5; i++){
+    let v = parseInt(document.getElementById('s'+i).value)||0;
+    if(v >= 1){
+      hasItems = true;
+      break;
+    }
   }
-  // collect bonus selected values
-  let bonusVals = [];
-  let bonusCount = Math.floor(singles / 5) * 2;
-  for (let i = 1; i <= bonusCount; i++) {
-    let sel = document.getElementById(`bonus${i}`);
-    if (sel && sel.value) bonusVals.push(sel.value);
+  if(!hasItems){
+    alert("請至少選擇一個陪玩項目（數量須為 1 或以上）！");
+    return;
   }
+  
+  // 在提交前先計算金額
+  calcAll();
   let formData = {
-    nickname: document.getElementById('nickname').value,
-    payType: document.getElementById('payType').value,
-    time: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : ''),
-    items: document.getElementById('showItems').innerText,
-    subtotal: document.getElementById('subtotalTxt').innerText,
-    discount: document.getElementById('discountTxt').innerText,
-    donate: document.getElementById('donateTxt').innerText,
-    total: document.getElementById('total').innerText,
-    bonus: bonusVals.join(','),   // 對應「贈送項目」
-    singles: singles,             // 幾單（點數計算會更穩定）
-    remark: document.getElementById('donateMsg') ? document.getElementById('donateMsg').value : "",
-    bankRemark: document.getElementById('bankRemark').value,
-    isVip: document.getElementById('vipCheck').checked,
-    remainingCount: document.getElementById('vipCheck').checked ? (document.getElementById('remainingCount').value || 0) : 0
+    contactMethod: document.getElementById('contactMethod').value,
+    contactId: document.getElementById('contactId').value,
+    legendCount: parseInt(document.getElementById('s1').value) || 0,
+    voiceCount: parseInt(document.getElementById('s2').value) || 0,
+    chatCount: parseInt(document.getElementById('s3').value) || 0,
+    partyCount: parseInt(document.getElementById('s4').value) || 0,
+    consultCount: parseInt(document.getElementById('s5').value) || 0,
+    weekday: document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '',
+    timeSlot: document.getElementById('timeblock').value,
+    fullDateTime: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + ' ' + (document.getElementById('timeblock').value || ''),
+    selectedItems: document.getElementById('showItems').innerText,
+    subtotal: parseInt(document.getElementById('subtotalTxt').innerText) || 0,
+    total: parseInt(document.getElementById('total').innerText) || 0,
+    remark: ''
   };
-  fetch("https://script.google.com/macros/s/AKfycbxEyhU35K8y2LfoCTKxdWDQfDpRortRReEdYsQFzLJPJuuUX08RN59iY3vr4Gw4yolEFw/exe", {
+  fetch("https://script.google.com/macros/s/AKfycbyjguswypzU-C0xOkN4ONtiIbcW0klOFFg9OK6VQcN6q--QWPwx8hRgiVVEXpLquDkQ/exec", {
     method: "POST",
     body: JSON.stringify(formData),
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "text/plain" }
   }).then(r=>r.text()).then(res=>{
     if(res.indexOf("success")>=0){
       alert('預約成功！請於一小時內完成付款並將匯款截圖或付款證明上傳至官方LINE，未完成付款視同放棄本時段。');
