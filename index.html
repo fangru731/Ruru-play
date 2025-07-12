@@ -285,7 +285,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     headers: { "Content-Type": "text/plain" }
   }).then(r=>r.text()).then(res=>{
     if(res.indexOf("success")>=0){
-      alert('預約成功！請於一小時內完成付款並將匯款截圖或付款證明上傳至官方LINE，未完成付款視同放棄本時段。');
+      alert('預約成功！');
       document.getElementById('orderForm').reset();
       calcAll();
     }else if(res.indexOf("黑名單")>=0){
