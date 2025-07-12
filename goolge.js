@@ -1,9 +1,11 @@
 // 處理 POST 請求
 function doPost(e) {
+  console.log('收到 POST 請求');
   try {
     const SHEET_ID = '11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
     const data = JSON.parse(e.postData.contents);
+    console.log('解析的資料:', data);
 
     // 黑名單檢查
     const blacklistSheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('黑名單');
@@ -57,6 +59,7 @@ function doPost(e) {
     ];
 
     sheet.appendRow(rowData);
+    console.log('資料已寫入工作表');
 
     return ContentService.createTextOutput('success').setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
