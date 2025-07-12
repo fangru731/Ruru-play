@@ -281,7 +281,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   };
   const params = new URLSearchParams(formData);
   
-  fetch("https://script.google.com/macros/s/AKfycbzsVoh0IKtcMsI0dqxYSNy8AGIA0gWx5-TZfxjypGScwpHdlO21VOSCxMmrXnKhkoCA/exec?" + params.toString(), {
+  fetch("https://script.google.com/macros/s/AKfycbzR_gSAYZwrHi34x4CdF3Oe4tqJBdW-dMKHSYZfiEQwkm05h4BZe1m8UytaOWXmMCEk/exec" + params.toString(), {
     method: "GET",
     credentials: 'omit'
   }).then(r=>r.text()).then(res=>{
