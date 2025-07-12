@@ -1,11 +1,9 @@
-// 處理 POST 請求
-function doPost(e) {
-  console.log('收到 POST 請求');
+// 處理表單資料的共用函數
+function processFormData(data) {
+  console.log('處理表單資料:', data);
   try {
     const SHEET_ID = '11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getActiveSheet();
-    const data = JSON.parse(e.postData.contents);
-    console.log('解析的資料:', data);
 
     // 黑名單檢查
     const blacklistSheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('黑名單');
@@ -68,8 +66,23 @@ function doPost(e) {
   }
 }
 
-// 用於 GET 測試
+// 處理 POST 請求
+function doPost(e) {
+  console.log('收到 POST 請求');
+  const data = JSON.parse(e.postData.contents);
+  return processFormData(data);
+}
+
+// 用於 GET 測試和接收參數
 function doGet(e) {
+  console.log('收到 GET 請求');
+  
+  // 如果有參數，處理表單資料
+  if (e.parameter && Object.keys(e.parameter).length > 0) {
+    console.log('GET 參數:', e.parameter);
+    return processFormData(e.parameter);
+  }
+  
   return ContentService.createTextOutput('Google Apps Script 運作正常').setMimeType(ContentService.MimeType.JSON);
 }
 

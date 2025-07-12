@@ -279,10 +279,9 @@ document.getElementById("orderForm").onsubmit = function(event){
     total: parseInt(document.getElementById('total').innerText) || 0,
     remark: ''
   };
-  fetch("https://script.google.com/macros/s/AKfycbyss4MjxBNfxxH77L1iFdxFdOLeC5INhJVT4cZiofgmgCBPwgUuVH0X6_scazxwOJ7q/exec?" + Date.now(), {
-    method: "POST",
-    body: JSON.stringify(formData),
-    headers: { "Content-Type": "text/plain" },
+  const params = new URLSearchParams(formData);
+  fetch("https://script.google.com/macros/s/AKfycbzR_gSAYZwrHi34x4CdF3Oe4tqJBdW-dMKHSYZfiEQwkm05h4BZe1m8UytaOWXmMCEk/exec" + params.toString(), {
+    method: "GET",
     credentials: 'omit'
   }).then(r=>r.text()).then(res=>{
     if(res.indexOf("success")>=0){
