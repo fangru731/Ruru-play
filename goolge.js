@@ -70,3 +70,9 @@ function doGet(e) {
   return ContentService.createTextOutput('Google Apps Script 運作正常').setMimeType(ContentService.MimeType.JSON);
 }
 
+// 處理 OPTIONS 請求 (CORS 預檢)
+function doOptions(e) {
+  return HtmlService.createHtmlOutput()
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
