@@ -280,11 +280,9 @@ document.getElementById("orderForm").onsubmit = function(event){
     remark: ''
   };
   const params = new URLSearchParams(formData);
+  params.append('callback', 'handleResponse');
   
-  fetch("https://script.google.com/macros/s/AKfycbygiHiyF-cq4NcFgCCKYhBTt0UMIOOYo6X-ofCIaA1Gngz12-QWUD-RPPhqqrjcCgIj/exec" + params.toString(), {
-    method: "GET",
-    credentials: 'omit'
-  }).then(r=>r.text()).then(res=>{
+  window.handleResponse = function(res) {
     if(res.indexOf("success")>=0){
       alert('預約成功！');
       document.getElementById('orderForm').reset();
@@ -296,9 +294,12 @@ document.getElementById("orderForm").onsubmit = function(event){
     }else{
       alert('送出失敗，請聯絡Ru！');
     }
-  }).catch(e=>{
-    alert('送出失敗，請聯絡Ru！');
-  });
+  };
+  
+  const script = document.createElement('script');
+  script.src = "https://script.google.com/macros/s/AKfycbxLZFgBCT5-PNbneDbH7gJm0zNUjOdHwJJrF9x0wVEGdGkMZ3ME7fviv9xFvoXiwgY/exec?" + params.toString();
+  document.head.appendChild(script);
+  setTimeout(() => document.head.removeChild(script), 3000);
 };
 
 // ====== 綁定 change 事件（放最下面！）======

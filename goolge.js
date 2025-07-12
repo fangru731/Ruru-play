@@ -81,7 +81,17 @@ function doGet(e) {
   // 如果有參數，處理表單資料
   if (e.parameter && Object.keys(e.parameter).length > 0) {
     console.log('GET 參數:', e.parameter);
-    return processFormData(e.parameter);
+    const result = processFormData(e.parameter);
+    
+    // 支援 JSONP
+    if (e.parameter.callback) {
+      const callback = e.parameter.callback;
+      const responseText = result.getContent();
+      return ContentService.createTextOutput(`${callback}("${responseText}")`)
+        .setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+    
+    return result;
   }
   
   return ContentService.createTextOutput('Google Apps Script 運作正常').setMimeType(ContentService.MimeType.JSON);
