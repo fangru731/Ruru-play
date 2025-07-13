@@ -62,12 +62,9 @@ function processFormData(data) {
     
     // 發送 Email 通知
     try {
-      console.log('準備發送 Email 給:', 'dog01050435@gmail.com');
       sendEmailNotification(orderNumber, rowData, data);
-      console.log('Email 通知已發送成功');
     } catch (emailError) {
       console.error('Email 發送失敗:', emailError);
-      console.error('錯誤詳情:', emailError.toString());
       // 即使 email 失敗，仍然回傳成功（資料已寫入）
     }
 
@@ -116,11 +113,8 @@ function doOptions(e) {
 
 // Email 通知函數
 function sendEmailNotification(orderNumber, rowData, originalData) {
-  console.log('=== 開始執行 sendEmailNotification ===');
-  console.log('訂單編號:', orderNumber);
-  
-  // 設定 email 收件人（請替換成您的 email）
-  const recipientEmail = 'dog01050435@gmail.com'; // TODO: 請替換成您的 email
+  // 設定 email 收件人
+  const recipientEmail = 'cocolin0731@gmail.com';
   
   // Email 主旨
   const subject = `新訂單通知 - ${orderNumber}`;
@@ -214,16 +208,11 @@ ${rowData[17] ? `備註：${rowData[17]}` : ''}
   `;
   
   // 發送 email
-  console.log('準備發送 Email 到:', recipientEmail);
-  console.log('主旨:', subject);
-  
   MailApp.sendEmail({
     to: recipientEmail,
     subject: subject,
     body: textBody,
     htmlBody: htmlBody
   });
-  
-  console.log('=== Email 發送完成 ===');
 }
 
