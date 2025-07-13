@@ -62,7 +62,7 @@ function processFormData(data) {
     
     // 發送 Email 通知
     try {
-      console.log('準備發送 Email 給:', '@gmail.com');
+      console.log('準備發送 Email 給:', 'dog01050435@gmail.com');
       sendEmailNotification(orderNumber, rowData, data);
       console.log('Email 通知已發送成功');
     } catch (emailError) {
@@ -120,7 +120,7 @@ function sendEmailNotification(orderNumber, rowData, originalData) {
   console.log('訂單編號:', orderNumber);
   
   // 設定 email 收件人（請替換成您的 email）
-  const recipientEmail = '@gmail.com'; // TODO: 請替換成您的 email
+  const recipientEmail = 'dog01050435@gmail.com'; // TODO: 請替換成您的 email
   
   // Email 主旨
   const subject = `新訂單通知 - ${orderNumber}`;

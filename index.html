@@ -283,6 +283,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   params.append('callback', 'handleResponse');
   
   window.handleResponse = function(res) {
+    console.log('收到回應:', res);
     if(res.indexOf("success")>=0){
       alert('預約成功！');
       document.getElementById('orderForm').reset();
@@ -296,8 +297,15 @@ document.getElementById("orderForm").onsubmit = function(event){
     }
   };
   
+  console.log('準備發送請求...');
+  console.log('請求 URL:', "https://script.google.com/macros/s/AKfycbwI_r4goiPzHvTnF-v2riDv7aiz62PweZ83F1EPjj9WXCjkewqoeUO-V8yO4bWOYRkf9g/exec?" + params.toString());
+  
   const script = document.createElement('script');
   script.src = "https://script.google.com/macros/s/AKfycbwI_r4goiPzHvTnF-v2riDv7aiz62PweZ83F1EPjj9WXCjkewqoeUO-V8yO4bWOYRkf9g/exec?" + params.toString();
+  script.onerror = function() {
+    console.error('請求失敗！');
+    alert('連線失敗，請檢查網路或聯絡管理員！');
+  };
   document.head.appendChild(script);
   setTimeout(() => document.head.removeChild(script), 3000);
 };
