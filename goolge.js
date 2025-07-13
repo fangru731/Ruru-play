@@ -85,13 +85,48 @@ function doPost(e) {
   return processFormData(data);
 }
 
+// 取得已預約時段的函數
+function getBookedTimeSlots(weekday) {
+  console.log('取得已預約時段:', weekday);
+  try {
+    const SHEET_ID = '17iFNvOb-Gl5B1nDMC9Jf0ls1s8t_a8UK9n2kB23fEo4';
+    const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('訂單');
+    const data = sheet.getDataRange().getValues();
+    const bookedSlots = [];
+    
+    // 從第二行開始檢查（跳過標題行）
+    for (let i = 1; i < data.length; i++) {
+      // J欄(索引9)是預約星期，K欄(索引10)是預約時段，P欄(索引15)是付款狀態
+      if (data[i][9] === weekday && data[i][15] === '已付款') {
+        bookedSlots.push(data[i][10]);
+      }
+    }
+    
+    console.log('找到已付款的預約時段:', bookedSlots);
+    return ContentService
+      .createTextOutput(JSON.stringify({ bookedSlots }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (err) {
+    console.error('取得已預約時段失敗:', err);
+    return ContentService
+      .createTextOutput(JSON.stringify({ error: err.message, bookedSlots: [] }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 // 用於 GET 測試和接收參數
 function doGet(e) {
   console.log('收到 GET 請求');
   
-  // 如果有參數，處理表單資料
-  if (e.parameter && Object.keys(e.parameter).length > 0) {
-    console.log('GET 參數:', e.parameter);
+  // 處理取得已預約時段的請求
+  if (e.parameter && e.parameter.action === 'getBookedSlots') {
+    return getBookedTimeSlots(e.parameter.weekday);
+  }
+  
+  // 如果有參數且不是 API 呼叫，處理表單資料
+  if (e.parameter && Object.keys(e.parameter).length > 0 && !e.parameter.action) {
+    console.log('GET 參數 (表單提交):', e.parameter);
     const result = processFormData(e.parameter);
     
     // 支援 JSONP

@@ -170,25 +170,97 @@ function getToday(){
   return wd===0?7:wd;
 }
 
-function updateTimeblocks() {
+// 快取機制
+const timeSlotCache = new Map();
+const CACHE_DURATION = 10000; // 10秒
+
+// 取得已預約時段
+async function fetchBookedSlots(weekday) {
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrmL3NMTIiC2E4o7vegZ86qzEfl9Pb-BGEF8iQnTOjtwFSoAazDkzc9sEd5WGNO5RK/exec";
+  const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
+  
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('網路錯誤');
+    }
+    
+    const data = await response.json();
+    return data.bookedSlots || [];
+  } catch (error) {
+    console.error('載入已預約時段失敗:', error);
+    return [];
+  }
+}
+
+// 帶快取的取得已預約時段
+async function fetchBookedSlotsWithCache(weekday) {
+  const now = Date.now();
+  const cached = timeSlotCache.get(weekday);
+  
+  if (cached && (now - cached.timestamp) < CACHE_DURATION) {
+    return cached.data;
+  }
+  
+  const data = await fetchBookedSlots(weekday);
+  timeSlotCache.set(weekday, { data, timestamp: now });
+  return data;
+}
+
+async function updateTimeblocks() {
   const day = document.getElementById('weekday').value;
   const blockSel = document.getElementById('timeblock');
-  blockSel.innerHTML = '<option value="">請選擇時間</option>';
+  
+  // 清空並顯示載入狀態
+  blockSel.innerHTML = '<option value="">載入中...</option>';
+  
   if (!weekSlots[day]) return;
-  let today = getToday();
-  let nowHM = pad0(new Date().getHours())+":"+pad0(new Date().getMinutes());
-  weekSlots[day].forEach(time => {
-    let disabled = false;
-    if (Number(day)<today) disabled = true;
-    if (Number(day)===today && time<=nowHM) disabled = true;
-    let opt = document.createElement('option');
-    opt.value = time;
-    opt.innerText = (disabled?"[已被預約/已過] ":"")+time;
-    if (disabled) opt.disabled = true;
-    blockSel.appendChild(opt);
-  });
-  document.getElementById("timeNotice").style.display="block";
-  document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
+  
+  try {
+    // 取得已預約的時段
+    const bookedSlots = await fetchBookedSlotsWithCache(day);
+    
+    // 重建選項
+    blockSel.innerHTML = '<option value="">請選擇時間</option>';
+    
+    let today = getToday();
+    let nowHM = pad0(new Date().getHours()) + ":" + pad0(new Date().getMinutes());
+    
+    weekSlots[day].forEach(time => {
+      let disabled = false;
+      let label = time;
+      
+      // 過去時間檢查
+      if (Number(day) < today) {
+        disabled = true;
+        label = `[已過] ${time}`;
+      } else if (Number(day) === today && time <= nowHM) {
+        disabled = true;
+        label = `[已過] ${time}`;
+      }
+      
+      // 已預約時段檢查
+      if (bookedSlots.includes(time)) {
+        disabled = true;
+        label = `[已被預約] ${time}`;
+      }
+      
+      let opt = document.createElement('option');
+      opt.value = time;
+      opt.innerText = label;
+      if (disabled) opt.disabled = true;
+      blockSel.appendChild(opt);
+    });
+    
+    document.getElementById("timeNotice").style.display="block";
+    document.getElementById("timeNotice").innerHTML="* 時間若顯示[已被預約/已過]則無法選，請改選其他時段！";
+    
+  } catch (error) {
+    console.error('載入時段失敗:', error);
+    blockSel.innerHTML = '<option value="">載入失敗，請重新整理</option>';
+    document.getElementById("timeNotice").style.display="block";
+    document.getElementById("timeNotice").innerHTML="* 載入時段失敗，請重新整理頁面！";
+  }
 }
     // 顯示聯絡方式輸入欄位
     function showContactInput() {
@@ -290,14 +362,36 @@ document.getElementById("orderForm").onsubmit = function(event){
   const params = new URLSearchParams(formData);
   params.append('callback', 'handleResponse');
   
+  // 防止重複提交
+  if (submitButton.disabled) {
+    return;
+  }
+  
   // 禁用按鈕防止重複提交
   submitButton.disabled = true;
   submitButton.textContent = '提交中...';
   
-  window.handleResponse = function(res) {
+  // 生成唯一的回調函數名稱
+  const callbackName = 'handleResponse_' + Date.now();
+  
+  // 清理函數
+  const cleanup = () => {
+    if (window[callbackName]) {
+      delete window[callbackName];
+    }
+    const existingScript = document.getElementById('submitScript');
+    if (existingScript) {
+      document.head.removeChild(existingScript);
+    }
+  };
+  
+  window[callbackName] = function(res) {
     // 重新啟用按鈕
     submitButton.disabled = false;
     submitButton.textContent = '完成預約並送出';
+    
+    // 清理資源
+    cleanup();
     
     if(res.indexOf("success")>=0){
       alert('預約成功！');
@@ -312,13 +406,18 @@ document.getElementById("orderForm").onsubmit = function(event){
     }
   };
   
+  // 先清理現有的 script
+  cleanup();
+  
   const script = document.createElement('script');
-  script.src = "https://script.google.com/macros/s/AKfycbxrmL3NMTIiC2E4o7vegZ86qzEfl9Pb-BGEF8iQnTOjtwFSoAazDkzc9sEd5WGNO5RK/exec?" + params.toString();
+  script.id = 'submitScript';
+  params.set('callback', callbackName);
+  script.src = "https://script.google.com/macros/s/AKfycbwx7gaPL4sNF4soPrMBjYVhxm4wmGNdamwFekh23ftNqgoXfzDI4r9qd9DfE6xwBy2b/exec?" + params.toString();
   document.head.appendChild(script);
   
   // 設定超時機制，避免按鈕永遠被禁用
   setTimeout(() => {
-    document.head.removeChild(script);
+    cleanup();
     if (submitButton.disabled) {
       submitButton.disabled = false;
       submitButton.textContent = '完成預約並送出';
@@ -332,6 +431,14 @@ window.onload = function(){
   document.getElementById('weekday').addEventListener('change', updateTimeblocks);
   // 預設如果頁面一開始就有選星期，也直接跑一次
   updateTimeblocks();
+  
+  // 每30秒自動更新一次時間選單（如果已選擇日期）
+  setInterval(() => {
+    const weekday = document.getElementById('weekday').value;
+    if (weekday) {
+      updateTimeblocks();
+    }
+  }, 30000);
 }
   </script>
 </body>
