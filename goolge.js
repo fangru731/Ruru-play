@@ -49,7 +49,10 @@ function processFormData(data) {
         existingTimeSlot = `${hours}:${minutes}`;
       }
       
+      console.log('重複檢查:', '現有-', existingData[i][9], existingTimeSlot, '新的-', data.weekday, data.timeSlot);
+      
       if (existingData[i][9] === data.weekday && existingTimeSlot === data.timeSlot) {
+        console.log('發現重複時段:', existingData[i][9], existingTimeSlot);
         return ContentService.createTextOutput('此時段已被預約').setMimeType(ContentService.MimeType.JSON);
       }
     }
