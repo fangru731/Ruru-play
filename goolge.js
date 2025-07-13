@@ -2,7 +2,7 @@
 function processFormData(data) {
   console.log('處理表單資料:', data);
   try {
-    const SHEET_ID = '11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM';
+    const SHEET_ID = '17iFNvOb-Gl5B1nDMC9Jf0ls1s8t_a8UK9n2kB23fEo4';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('訂單');
 
     // 黑名單檢查
@@ -59,6 +59,15 @@ function processFormData(data) {
     console.log('準備寫入的資料:', rowData);
     sheet.appendRow(rowData);
     console.log('資料已寫入工作表，行數:', sheet.getLastRow());
+    
+    // 發送 Email 通知
+    try {
+      sendEmailNotification(orderNumber, rowData, data);
+      console.log('Email 通知已發送');
+    } catch (emailError) {
+      console.error('Email 發送失敗:', emailError);
+      // 即使 email 失敗，仍然回傳成功（資料已寫入）
+    }
 
     return ContentService.createTextOutput('success').setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
@@ -101,5 +110,110 @@ function doGet(e) {
 function doOptions(e) {
   return HtmlService.createHtmlOutput()
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+// Email 通知函數
+function sendEmailNotification(orderNumber, rowData, originalData) {
+  // 設定 email 收件人（請替換成您的 email）
+  const recipientEmail = '@gmail.com'; // TODO: 請替換成您的 email
+  
+  // Email 主旨
+  const subject = `新訂單通知 - ${orderNumber}`;
+  
+  // 建立 HTML 格式的 email 內容
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">新訂單通知</h2>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
+        <h3 style="color: #555; margin-top: 0;">訂單資訊</h3>
+        <p><strong>訂單編號：</strong> ${orderNumber}</p>
+        <p><strong>提交時間：</strong> ${rowData[1]}</p>
+      </div>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
+        <h3 style="color: #555; margin-top: 0;">客戶資訊</h3>
+        <p><strong>聯絡方式：</strong> ${rowData[2]}</p>
+        <p><strong>聯絡ID：</strong> ${rowData[3]}</p>
+      </div>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
+        <h3 style="color: #555; margin-top: 0;">預約資訊</h3>
+        <p><strong>預約星期：</strong> ${rowData[9]}</p>
+        <p><strong>預約時段：</strong> ${rowData[10]}</p>
+        <p><strong>完整預約時間：</strong> ${rowData[11]}</p>
+      </div>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
+        <h3 style="color: #555; margin-top: 0;">服務項目</h3>
+        <p><strong>所選項目：</strong> ${rowData[12]}</p>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          ${rowData[4] > 0 ? `<li>傳說對決：${rowData[4]} 小時</li>` : ''}
+          ${rowData[5] > 0 ? `<li>語音通話：${rowData[5]} 小時</li>` : ''}
+          ${rowData[6] > 0 ? `<li>打字聊天：${rowData[6]} 小時</li>` : ''}
+          ${rowData[7] > 0 ? `<li>全民Party唱歌：${rowData[7]} 小時</li>` : ''}
+          ${rowData[8] > 0 ? `<li>情感諮詢：${rowData[8]} 小時</li>` : ''}
+        </ul>
+      </div>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
+        <h3 style="color: #555; margin-top: 0;">金額資訊</h3>
+        <p><strong>服務金額小計：</strong> NT$ ${rowData[13]}</p>
+        <p><strong>最終應付金額：</strong> <span style="color: #e74c3c; font-size: 1.2em;">NT$ ${rowData[14]}</span></p>
+      </div>
+      
+      ${rowData[17] ? `
+      <div style="background-color: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 8px; border: 1px solid #ffeaa7;">
+        <h3 style="color: #856404; margin-top: 0;">備註</h3>
+        <p style="margin: 0;">${rowData[17]}</p>
+      </div>
+      ` : ''}
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center; color: #666;">
+        <p>此為系統自動發送的通知郵件</p>
+        <p><a href="https://docs.google.com/spreadsheets/d/${SpreadsheetApp.openById('11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM').getId()}" 
+              style="color: #3498db; text-decoration: none;">查看 Google Sheet</a></p>
+      </div>
+    </div>
+  `;
+  
+  // 純文字版本（作為備用）
+  const textBody = `
+新訂單通知 - ${orderNumber}
+
+訂單資訊：
+- 訂單編號：${orderNumber}
+- 提交時間：${rowData[1]}
+
+客戶資訊：
+- 聯絡方式：${rowData[2]}
+- 聯絡ID：${rowData[3]}
+
+預約資訊：
+- 預約星期：${rowData[9]}
+- 預約時段：${rowData[10]}
+- 完整預約時間：${rowData[11]}
+
+服務項目：${rowData[12]}
+${rowData[4] > 0 ? `- 傳說對決：${rowData[4]} 小時` : ''}
+${rowData[5] > 0 ? `- 語音通話：${rowData[5]} 小時` : ''}
+${rowData[6] > 0 ? `- 打字聊天：${rowData[6]} 小時` : ''}
+${rowData[7] > 0 ? `- 全民Party唱歌：${rowData[7]} 小時` : ''}
+${rowData[8] > 0 ? `- 情感諮詢：${rowData[8]} 小時` : ''}
+
+金額資訊：
+- 服務金額小計：NT$ ${rowData[13]}
+- 最終應付金額：NT$ ${rowData[14]}
+
+${rowData[17] ? `備註：${rowData[17]}` : ''}
+  `;
+  
+  // 發送 email
+  MailApp.sendEmail({
+    to: recipientEmail,
+    subject: subject,
+    body: textBody,
+    htmlBody: htmlBody
+  });
 }
 
