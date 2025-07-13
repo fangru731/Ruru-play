@@ -424,9 +424,11 @@ document.getElementById("orderForm").onsubmit = function(event){
   
   // 使用固定的回調函數名稱
   const callbackName = 'handleFormResponse';
+  console.log('設定回調函數名稱:', callbackName);
   
   // 設定全域回調函數
   window[callbackName] = function(res) {
+    console.log('回調函數被呼叫:', res);
     // 重新啟用按鈕
     submitButton.disabled = false;
     submitButton.textContent = '完成預約並送出';
@@ -459,10 +461,13 @@ document.getElementById("orderForm").onsubmit = function(event){
   // 準備參數
   const params = new URLSearchParams(formData);
   params.set('callback', callbackName);
+  console.log('最終 URL 參數:', params.toString());
   
   const script = document.createElement('script');
   script.id = 'submitScript';
-  script.src = "https://script.google.com/macros/s/AKfycbzWppAAEjaQYfYvjAL_yvmLiUIgPVXUCXA8uT_2wVfGkZ8Ol4LsDp6q8rUkhkN7CD8/exec?" + params.toString();
+  const finalUrl = "https://script.google.com/macros/s/AKfycbzWppAAEjaQYfYvjAL_yvmLiUIgPVXUCXA8uT_2wVfGkZ8Ol4LsDp6q8rUkhkN7CD8/exec?" + params.toString();
+  console.log('請求 URL:', finalUrl);
+  script.src = finalUrl;
   document.head.appendChild(script);
   
   // 設定超時機制，避免按鈕永遠被禁用
