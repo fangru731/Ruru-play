@@ -107,6 +107,20 @@ function doPost(e) {
 function getBookedTimeSlots(weekday) {
   console.log('取得已預約時段:', weekday);
   try {
+    // 星期數字轉文字對照表
+    const weekdayMap = {
+      '1': '星期一',
+      '2': '星期二', 
+      '3': '星期三',
+      '4': '星期四',
+      '5': '星期五',
+      '6': '星期六',
+      '7': '星期日'
+    };
+    
+    const weekdayText = weekdayMap[weekday] || weekday;
+    console.log('星期數字:', weekday, '-> 星期文字:', weekdayText);
+    
     const SHEET_ID = '17iFNvOb-Gl5B1nDMC9Jf0ls1s8t_a8UK9n2kB23fEo4';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('訂單');
     const data = sheet.getDataRange().getValues();
@@ -115,8 +129,27 @@ function getBookedTimeSlots(weekday) {
     // 從第二行開始檢查（跳過標題行）
     for (let i = 1; i < data.length; i++) {
       // J欄(索引9)是預約星期，K欄(索引10)是預約時段，P欄(索引15)是付款狀態
-      if (data[i][9] === weekday && data[i][15] === '已付款') {
-        bookedSlots.push(data[i][10]);
+      if (data[i][9] === weekdayText && data[i][15] === '已付款') {
+        let timeSlot = data[i][10];
+        
+        // 如果是日期物件，轉換為時間字串（考慮台灣時區）
+        if (timeSlot instanceof Date) {
+          // 使用台灣時區
+          const taiwanTime = new Date(timeSlot.getTime() + (8 * 60 * 60 * 1000)); // UTC+8
+          const hours = taiwanTime.getUTCHours().toString().padStart(2, '0');
+          const minutes = taiwanTime.getUTCMinutes().toString().padStart(2, '0');
+          timeSlot = `${hours}:${minutes}`;
+        } else if (typeof timeSlot === 'string' && timeSlot.includes('T')) {
+          // 如果是 ISO 字串，解析為時間（考慮台灣時區）
+          const date = new Date(timeSlot);
+          const taiwanTime = new Date(date.getTime() + (8 * 60 * 60 * 1000)); // UTC+8
+          const hours = taiwanTime.getUTCHours().toString().padStart(2, '0');
+          const minutes = taiwanTime.getUTCMinutes().toString().padStart(2, '0');
+          timeSlot = `${hours}:${minutes}`;
+        }
+        
+        bookedSlots.push(timeSlot);
+        console.log('找到已付款預約:', data[i][9], data[i][10], '-> 轉換後:', timeSlot, data[i][15]);
       }
     }
     

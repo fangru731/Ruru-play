@@ -178,19 +178,27 @@ const CACHE_DURATION = 10000; // 10秒
 async function fetchBookedSlots(weekday) {
   // 如果 weekday 無效，直接返回空陣列
   if (!weekday || weekday === '' || weekday === '0') {
+    console.log('fetchBookedSlots: weekday 無效', weekday);
     return [];
   }
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlq2ROqQzk8wt_Y5-dIrsY9dx8OG-iCmWW7zx-48KFg_3pmDiHQt3wx2riKCv_31BE/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3pt_DQToMEmDGVCk7XvWYNV9nYGNvOUhCnI3dI7RhSrbz0Js1eyGjWkf_nfH3JbYj/exec";
   const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
+  
+  console.log('fetchBookedSlots: 請求 URL', url);
   
   try {
     const response = await fetch(url);
+    console.log('fetchBookedSlots: response status', response.status);
+    
     if (!response.ok) {
-      throw new Error('網路錯誤');
+      throw new Error(`網路錯誤: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log('fetchBookedSlots: 回應資料', data);
+    console.log('fetchBookedSlots: bookedSlots', data.bookedSlots);
+    
     return data.bookedSlots || [];
   } catch (error) {
     console.error('載入已預約時段失敗:', error);
@@ -227,7 +235,9 @@ async function updateTimeblocks() {
   
   try {
     // 取得已預約的時段
+    console.log('updateTimeblocks: 查詢星期', day);
     const bookedSlots = await fetchBookedSlotsWithCache(day);
+    console.log('updateTimeblocks: 取得的 bookedSlots', bookedSlots);
     
     // 重建選項
     blockSel.innerHTML = '<option value="">請選擇時間</option>';
@@ -250,6 +260,7 @@ async function updateTimeblocks() {
       
       // 已預約時段檢查
       if (bookedSlots.includes(time)) {
+        console.log('updateTimeblocks: 找到已預約時段', time);
         disabled = true;
         label = `[已被預約] ${time}`;
       }
@@ -377,6 +388,15 @@ document.getElementById("orderForm").onsubmit = function(event){
   
   // 在提交前先計算金額
   calcAll();
+  
+  // 星期數字轉文字對照表（與後端保持一致）
+  const weekdayMap = {
+    '1': '星期一', '2': '星期二', '3': '星期三', '4': '星期四',
+    '5': '星期五', '6': '星期六', '7': '星期日'
+  };
+  const weekdayValue = document.getElementById('weekday').value;
+  const weekdayText = weekdayMap[weekdayValue] || weekdayValue;
+  
   let formData = {
     contactMethod: document.getElementById('contactMethod').value,
     contactId: document.getElementById('contactId').value,
@@ -385,7 +405,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     chatCount: parseInt(document.getElementById('s3').value) || 0,
     partyCount: parseInt(document.getElementById('s4').value) || 0,
     consultCount: parseInt(document.getElementById('s5').value) || 0,
-    weekday: document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '',
+    weekday: weekdayText,
     timeSlot: document.getElementById('timeblock').value,
     fullDateTime: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + ' ' + (document.getElementById('timeblock').value || ''),
     selectedItems: document.getElementById('showItems').innerText,
@@ -446,7 +466,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   const script = document.createElement('script');
   script.id = 'submitScript';
   params.set('callback', callbackName);
-  script.src = "https://script.google.com/macros/s/AKfycbwlq2ROqQzk8wt_Y5-dIrsY9dx8OG-iCmWW7zx-48KFg_3pmDiHQt3wx2riKCv_31BE/exec?" + params.toString();
+  script.src = "https://script.google.com/macros/s/AKfycby3pt_DQToMEmDGVCk7XvWYNV9nYGNvOUhCnI3dI7RhSrbz0Js1eyGjWkf_nfH3JbYj/exec?" + params.toString();
   document.head.appendChild(script);
   
   // 設定超時機制，避免按鈕永遠被禁用
@@ -459,6 +479,14 @@ document.getElementById("orderForm").onsubmit = function(event){
     }
   }, 10000);
 };
+
+// 測試函數 - 可以在瀏覽器 console 中呼叫
+function testAPI() {
+  console.log('=== 測試 API 功能 ===');
+  fetchBookedSlots('7').then(result => {
+    console.log('測試星期日(7)的結果:', result);
+  });
+}
 
 // ====== 綁定 change 事件（放最下面！）======
 window.onload = function(){
@@ -473,6 +501,9 @@ window.onload = function(){
       updateTimeblocks();
     }
   }, 30000);
+  
+  // 讓測試函數可以在 console 中使用
+  window.testAPI = testAPI;
 }
   </script>
 </body>
