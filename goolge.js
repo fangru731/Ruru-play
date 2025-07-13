@@ -35,9 +35,14 @@ function processFormData(data) {
       }
     }
 
-    // 時段重複檢查 - 檢查預約星期(J欄)和預約時段(K欄)
+    // 時段重複檢查 - 只檢查已付款的預約
     const existingData = sheet.getDataRange().getValues();
     for (let i = 1; i < existingData.length; i++) {
+      // 只檢查已付款的預約 - P欄(索引15)是付款狀態
+      if (existingData[i][15] !== '已付款') {
+        continue; // 跳過非已付款的預約
+      }
+      
       // J欄(索引9)是預約星期，K欄(索引10)是預約時段
       let existingTimeSlot = existingData[i][10];
       
@@ -49,10 +54,10 @@ function processFormData(data) {
         existingTimeSlot = `${hours}:${minutes}`;
       }
       
-      console.log('重複檢查:', '現有-', existingData[i][9], existingTimeSlot, '新的-', data.weekday, data.timeSlot);
+      console.log('重複檢查(已付款):', '現有-', existingData[i][9], existingTimeSlot, existingData[i][15], '新的-', data.weekday, data.timeSlot);
       
       if (existingData[i][9] === data.weekday && existingTimeSlot === data.timeSlot) {
-        console.log('發現重複時段:', existingData[i][9], existingTimeSlot);
+        console.log('發現重複的已付款時段:', existingData[i][9], existingTimeSlot);
         return ContentService.createTextOutput('此時段已被預約').setMimeType(ContentService.MimeType.JSON);
       }
     }

@@ -182,7 +182,7 @@ async function fetchBookedSlots(weekday) {
     return [];
   }
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykFsxn6LY07cmhf9vwRK1-pC4jZ050yj8hl1J8VvZ2C0KNKAHJ04htH8N82KT4Sbs3/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywXnGmrkO2d3voJpNImOBxHTFSqIojEJmIjXtHSlZuExunGvBAzUgMVen3v7QAI-QF/exec";
   const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
   
   console.log('fetchBookedSlots: 請求 URL', url);
@@ -465,7 +465,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   
   const script = document.createElement('script');
   script.id = 'submitScript';
-  const finalUrl = "https://script.google.com/macros/s/AKfycbykFsxn6LY07cmhf9vwRK1-pC4jZ050yj8hl1J8VvZ2C0KNKAHJ04htH8N82KT4Sbs3/exec?" + params.toString();
+  const finalUrl = "https://script.google.com/macros/s/AKfycbywXnGmrkO2d3voJpNImOBxHTFSqIojEJmIjXtHSlZuExunGvBAzUgMVen3v7QAI-QF/exec?" + params.toString();
   console.log('請求 URL:', finalUrl);
   script.src = finalUrl;
   document.head.appendChild(script);
