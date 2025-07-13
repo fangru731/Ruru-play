@@ -176,7 +176,12 @@ const CACHE_DURATION = 10000; // 10秒
 
 // 取得已預約時段
 async function fetchBookedSlots(weekday) {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrmL3NMTIiC2E4o7vegZ86qzEfl9Pb-BGEF8iQnTOjtwFSoAazDkzc9sEd5WGNO5RK/exec";
+  // 如果 weekday 無效，直接返回空陣列
+  if (!weekday || weekday === '' || weekday === '0') {
+    return [];
+  }
+  
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlq2ROqQzk8wt_Y5-dIrsY9dx8OG-iCmWW7zx-48KFg_3pmDiHQt3wx2riKCv_31BE/exec";
   const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
   
   try {
@@ -211,10 +216,14 @@ async function updateTimeblocks() {
   const day = document.getElementById('weekday').value;
   const blockSel = document.getElementById('timeblock');
   
+  // 如果沒有選擇星期，直接返回
+  if (!day || !weekSlots[day]) {
+    blockSel.innerHTML = '<option value="">請選擇時間</option>';
+    return;
+  }
+  
   // 清空並顯示載入狀態
   blockSel.innerHTML = '<option value="">載入中...</option>';
-  
-  if (!weekSlots[day]) return;
   
   try {
     // 取得已預約的時段
