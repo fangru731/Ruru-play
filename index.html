@@ -246,8 +246,8 @@ document.getElementById("orderForm").onsubmit = function(event){
   event.preventDefault();
   
   // 檢查是否正在提交中
-  const submitBtn = document.querySelector('button[type="submit"]');
-  if (submitBtn.disabled) {
+  const submitButton = document.querySelector('button[type="submit"]');
+  if (submitButton.disabled) {
     return;
   }
   
@@ -291,14 +291,13 @@ document.getElementById("orderForm").onsubmit = function(event){
   params.append('callback', 'handleResponse');
   
   // 禁用按鈕防止重複提交
-  const submitBtn = document.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  submitBtn.textContent = '提交中...';
+  submitButton.disabled = true;
+  submitButton.textContent = '提交中...';
   
   window.handleResponse = function(res) {
     // 重新啟用按鈕
-    submitBtn.disabled = false;
-    submitBtn.textContent = '完成預約並送出';
+    submitButton.disabled = false;
+    submitButton.textContent = '完成預約並送出';
     
     if(res.indexOf("success")>=0){
       alert('預約成功！');
@@ -320,9 +319,9 @@ document.getElementById("orderForm").onsubmit = function(event){
   // 設定超時機制，避免按鈕永遠被禁用
   setTimeout(() => {
     document.head.removeChild(script);
-    if (submitBtn.disabled) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = '完成預約並送出';
+    if (submitButton.disabled) {
+      submitButton.disabled = false;
+      submitButton.textContent = '完成預約並送出';
       alert('提交超時，請重試！');
     }
   }, 10000);
