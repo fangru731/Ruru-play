@@ -298,10 +298,10 @@ document.getElementById("orderForm").onsubmit = function(event){
   };
   
   console.log('準備發送請求...');
-  console.log('請求 URL:', "https://script.google.com/macros/s/AKfycbwI_r4goiPzHvTnF-v2riDv7aiz62PweZ83F1EPjj9WXCjkewqoeUO-V8yO4bWOYRkf9g/exec?" + params.toString());
+  console.log('請求 URL:', "https://script.google.com/macros/s/AKfycbwid-5og3ondyBFVmmOS1gBEhKZLb6BhmMnSR6rWbH5XJURDAFTd0p0wgLL9rsxP5FUEQ/exec?" + params.toString());
   
   const script = document.createElement('script');
-  script.src = "https://script.google.com/macros/s/AKfycbwI_r4goiPzHvTnF-v2riDv7aiz62PweZ83F1EPjj9WXCjkewqoeUO-V8yO4bWOYRkf9g/exec?" + params.toString();
+  script.src = "https://script.google.com/macros/s/AKfycbwid-5og3ondyBFVmmOS1gBEhKZLb6BhmMnSR6rWbH5XJURDAFTd0p0wgLL9rsxP5FUEQ/exec?" + params.toString();
   script.onerror = function() {
     console.error('請求失敗！');
     alert('連線失敗，請檢查網路或聯絡管理員！');
