@@ -89,7 +89,7 @@ function processFormData(data) {
       parseInt(String(data.total)) || 0,         // O: 最終應付金額
       '待付款',                                  // P: 付款狀態
       '待服務',                                  // Q: 服務狀態
-      String(data.remark || '')                  // R: 備註
+      parseInt(String(data.donation)) || 0       // R: 抖內金額（原備註欄）
     ];
 
     console.log('準備寫入的資料:', rowData);
@@ -267,15 +267,9 @@ function sendEmailNotification(orderNumber, rowData, originalData) {
       <div style="background-color: #f9f9f9; padding: 20px; margin: 20px 0; border-radius: 8px;">
         <h3 style="color: #555; margin-top: 0;">金額資訊</h3>
         <p><strong>服務金額小計：</strong> NT$ ${rowData[13]}</p>
+        <p><strong>抖內金額：</strong> NT$ ${rowData[17]}</p>
         <p><strong>最終應付金額：</strong> <span style="color: #e74c3c; font-size: 1.2em;">NT$ ${rowData[14]}</span></p>
       </div>
-      
-      ${rowData[17] ? `
-      <div style="background-color: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 8px; border: 1px solid #ffeaa7;">
-        <h3 style="color: #856404; margin-top: 0;">備註</h3>
-        <p style="margin: 0;">${rowData[17]}</p>
-      </div>
-      ` : ''}
       
       <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center; color: #666;">
         <p>此為系統自動發送的通知郵件</p>
@@ -311,9 +305,8 @@ ${rowData[8] > 0 ? `- 情感諮詢：${rowData[8]} 小時` : ''}
 
 金額資訊：
 - 服務金額小計：NT$ ${rowData[13]}
+- 抖內金額：NT$ ${rowData[17]}
 - 最終應付金額：NT$ ${rowData[14]}
-
-${rowData[17] ? `備註：${rowData[17]}` : ''}
   `;
   
   // 發送 email

@@ -103,6 +103,21 @@
         </select>
         <div id="timeNotice" class="notice" style="display:none;"></div>
       </div>
+      
+      <!-- 抖內欄位 -->
+      <div class="form-section">
+        <label for="donation">💰 抖內金額（選填）</label>
+        <div style="margin-bottom: 10px;">
+          <input type="number" id="donation" min="0" max="9999" value="0" style="width:80px;" onchange="calcAll()" oninput="calcAll()"> 
+          <span class="checkbox-label">NT$ （感謝您的支持 ❤️）</span>
+        </div>
+        <div style="font-size: 0.9em; color: #666; line-height: 1.4;">
+          💝 抖內是對 Ru 的額外支持與鼓勵<br>
+          🌟 金額將直接加入您的總付款金額中<br>
+          ✨ 每一份支持都是 Ru 繼續努力的動力！
+        </div>
+      </div>
+      
       <!-- 規則勾選 -->
       <div class="form-section" style="margin-bottom: 8px;">
         <div style="max-height:210px; overflow-y:auto; border:1.2px solid #ffe082; background:#fffdf5; border-radius:9px; padding:10px; font-size:1em; color:#a36b00;">
@@ -139,6 +154,7 @@
       <b>預約時間：</b><span id="showTime"></span><br>
       <b>所選項目：</b><span id="showItems"></span><br>
       <b>服務金額小計：</b><span id="subtotalTxt">0</span> 元<br>
+      <b>抖內金額：</b><span id="donationTxt">0</span> 元<br>
       <b>最終應付金額：</b><span id="total">0</span> 元
     </div>
     <!-- LINE QR code -->
@@ -182,7 +198,7 @@ async function fetchBookedSlots(weekday) {
     return [];
   }
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywXnGmrkO2d3voJpNImOBxHTFSqIojEJmIjXtHSlZuExunGvBAzUgMVen3v7QAI-QF/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwihosgHP3B5pgFsZqvd2s90hr-Sp5XKc-FsvXyml1oZSc_WR-LvXtJY3Q0AYLM4_XO/exec";
   const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
   
   console.log('fetchBookedSlots: 請求 URL', url);
@@ -326,9 +342,17 @@ async function updateTimeblocks() {
           singles += v;
         }
       }
+      
+      // 抖內金額
+      let donation = parseInt(document.getElementById('donation').value) || 0;
+      
+      // 計算總金額
+      let total = subtotal + donation;
+      
       document.getElementById('showItems').innerText = items.join('、')||'無';
       document.getElementById('subtotalTxt').innerText = subtotal;
-      document.getElementById('total').innerText = subtotal;
+      document.getElementById('donationTxt').innerText = donation;
+      document.getElementById('total').innerText = total;
       document.getElementById('showTime').innerText =
         (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') +
         (document.getElementById('timeblock').value ? ' ' + document.getElementById('timeblock').value : '');
@@ -410,6 +434,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     fullDateTime: (document.getElementById('weekday').options[document.getElementById('weekday').selectedIndex].text || '') + ' ' + (document.getElementById('timeblock').value || ''),
     selectedItems: document.getElementById('showItems').innerText,
     subtotal: parseInt(document.getElementById('subtotalTxt').innerText) || 0,
+    donation: parseInt(document.getElementById('donation').value) || 0,
     total: parseInt(document.getElementById('total').innerText) || 0,
     remark: ''
   };
@@ -465,7 +490,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   
   const script = document.createElement('script');
   script.id = 'submitScript';
-  const finalUrl = "https://script.google.com/macros/s/AKfycbywXnGmrkO2d3voJpNImOBxHTFSqIojEJmIjXtHSlZuExunGvBAzUgMVen3v7QAI-QF/exec?" + params.toString();
+  const finalUrl = "https://script.google.com/macros/s/AKfycbwihosgHP3B5pgFsZqvd2s90hr-Sp5XKc-FsvXyml1oZSc_WR-LvXtJY3Q0AYLM4_XO/exec?" + params.toString();
   console.log('請求 URL:', finalUrl);
   script.src = finalUrl;
   document.head.appendChild(script);
