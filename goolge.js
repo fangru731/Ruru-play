@@ -39,7 +39,17 @@ function processFormData(data) {
     const existingData = sheet.getDataRange().getValues();
     for (let i = 1; i < existingData.length; i++) {
       // J欄(索引9)是預約星期，K欄(索引10)是預約時段
-      if (existingData[i][9] === data.weekday && existingData[i][10] === data.timeSlot) {
+      let existingTimeSlot = existingData[i][10];
+      
+      // 如果現有時段是日期物件，轉換為時間字串
+      if (existingTimeSlot instanceof Date) {
+        const taiwanTime = new Date(existingTimeSlot.getTime() + (8 * 60 * 60 * 1000));
+        const hours = taiwanTime.getUTCHours().toString().padStart(2, '0');
+        const minutes = taiwanTime.getUTCMinutes().toString().padStart(2, '0');
+        existingTimeSlot = `${hours}:${minutes}`;
+      }
+      
+      if (existingData[i][9] === data.weekday && existingTimeSlot === data.timeSlot) {
         return ContentService.createTextOutput('此時段已被預約').setMimeType(ContentService.MimeType.JSON);
       }
     }

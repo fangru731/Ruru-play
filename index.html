@@ -182,7 +182,7 @@ async function fetchBookedSlots(weekday) {
     return [];
   }
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3pt_DQToMEmDGVCk7XvWYNV9nYGNvOUhCnI3dI7RhSrbz0Js1eyGjWkf_nfH3JbYj/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWppAAEjaQYfYvjAL_yvmLiUIgPVXUCXA8uT_2wVfGkZ8Ol4LsDp6q8rUkhkN7CD8/exec";
   const url = `${SCRIPT_URL}?action=getBookedSlots&weekday=${encodeURIComponent(weekday)}`;
   
   console.log('fetchBookedSlots: 請求 URL', url);
@@ -413,9 +413,6 @@ document.getElementById("orderForm").onsubmit = function(event){
     total: parseInt(document.getElementById('total').innerText) || 0,
     remark: ''
   };
-  const params = new URLSearchParams(formData);
-  params.append('callback', 'handleResponse');
-  
   // 防止重複提交
   if (submitButton.disabled) {
     return;
@@ -439,6 +436,7 @@ document.getElementById("orderForm").onsubmit = function(event){
     }
   };
   
+  // 先設定回調函數
   window[callbackName] = function(res) {
     // 重新啟用按鈕
     submitButton.disabled = false;
@@ -463,10 +461,13 @@ document.getElementById("orderForm").onsubmit = function(event){
   // 先清理現有的 script
   cleanup();
   
+  // 準備參數
+  const params = new URLSearchParams(formData);
+  params.set('callback', callbackName);
+  
   const script = document.createElement('script');
   script.id = 'submitScript';
-  params.set('callback', callbackName);
-  script.src = "https://script.google.com/macros/s/AKfycby3pt_DQToMEmDGVCk7XvWYNV9nYGNvOUhCnI3dI7RhSrbz0Js1eyGjWkf_nfH3JbYj/exec?" + params.toString();
+  script.src = "https://script.google.com/macros/s/AKfycbzWppAAEjaQYfYvjAL_yvmLiUIgPVXUCXA8uT_2wVfGkZ8Ol4LsDp6q8rUkhkN7CD8/exec?" + params.toString();
   document.head.appendChild(script);
   
   // 設定超時機制，避免按鈕永遠被禁用
