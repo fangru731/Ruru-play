@@ -24,6 +24,7 @@
     .qr { display:block; margin:22px auto 7px auto; width:105px; border-radius:16px; box-shadow:0 0 9px #ffef8f55;}
     button, .btn { background: #ffd43b; color:#a67200; font-size: 1.22em; border:none; border-radius:12px; padding:13px 32px; cursor:pointer; margin-top:13px; box-shadow:0 2px 12px #ffe08270; transition:0.1s; font-weight:bold; }
     button:hover { background: #fff176; color: #e67a00;}
+    button:disabled { background: #ccc; color: #999; cursor: not-allowed; box-shadow: none; }
     .agree-label { font-weight: normal; color:#c18700; }
     .notice {background:#fffbe0; color:#b8860b; border-radius:10px; border:1px solid #ffe082; padding:9px 13px; margin-bottom:14px; font-size:1em;}
     .disabled { color: #aaa !important;}
@@ -243,6 +244,13 @@ function updateTimeblocks() {
   // ====== 表單送出 ======
 document.getElementById("orderForm").onsubmit = function(event){
   event.preventDefault();
+  
+  // 檢查是否正在提交中
+  const submitBtn = document.querySelector('button[type="submit"]');
+  if (submitBtn.disabled) {
+    return;
+  }
+  
   if (!document.getElementById("agreeRule").checked) {
     alert("請勾選同意服務規則！");
     return;
@@ -282,7 +290,16 @@ document.getElementById("orderForm").onsubmit = function(event){
   const params = new URLSearchParams(formData);
   params.append('callback', 'handleResponse');
   
+  // 禁用按鈕防止重複提交
+  const submitBtn = document.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '提交中...';
+  
   window.handleResponse = function(res) {
+    // 重新啟用按鈕
+    submitBtn.disabled = false;
+    submitBtn.textContent = '完成預約並送出';
+    
     if(res.indexOf("success")>=0){
       alert('預約成功！');
       document.getElementById('orderForm').reset();
@@ -299,7 +316,16 @@ document.getElementById("orderForm").onsubmit = function(event){
   const script = document.createElement('script');
   script.src = "https://script.google.com/macros/s/AKfycbwvqIWEamaxUjpYQDuRA92p7-g_ur_Kv4x9okhG2sibhyQ_88JJh4hCDHQV1Xhb1gam/exec?" + params.toString();
   document.head.appendChild(script);
-  setTimeout(() => document.head.removeChild(script), 3000);
+  
+  // 設定超時機制，避免按鈕永遠被禁用
+  setTimeout(() => {
+    document.head.removeChild(script);
+    if (submitBtn.disabled) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '完成預約並送出';
+      alert('提交超時，請重試！');
+    }
+  }, 10000);
 };
 
 // ====== 綁定 change 事件（放最下面！）======
