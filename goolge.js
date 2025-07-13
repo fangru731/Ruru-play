@@ -175,7 +175,7 @@ function sendEmailNotification(orderNumber, rowData, originalData) {
       
       <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center; color: #666;">
         <p>此為系統自動發送的通知郵件</p>
-        <p><a href="https://docs.google.com/spreadsheets/d/${SpreadsheetApp.openById('11ZfpYUcnXYVmGWGTTP3xdWhOcmHy0snBSMK1omR9-OM').getId()}" 
+        <p><a href="https://docs.google.com/spreadsheets/d/${SpreadsheetApp.openById('17iFNvOb-Gl5B1nDMC9Jf0ls1s8t_a8UK9n2kB23fEo4').getId()}" 
               style="color: #3498db; text-decoration: none;">查看 Google Sheet</a></p>
       </div>
     </div>
