@@ -2,6 +2,24 @@
 function processFormData(data) {
   console.log('處理表單資料:', data);
   try {
+    // 後端資料驗證
+    if (!data.contactMethod || !data.contactId || !data.weekday || !data.timeSlot) {
+      console.log('資料驗證失敗：缺少必填欄位');
+      return ContentService.createTextOutput('資料驗證失敗：缺少必填欄位').setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // 檢查是否至少有一個服務項目
+    const totalServices = (parseInt(data.legendCount) || 0) + 
+                         (parseInt(data.voiceCount) || 0) + 
+                         (parseInt(data.chatCount) || 0) + 
+                         (parseInt(data.partyCount) || 0) + 
+                         (parseInt(data.consultCount) || 0);
+    
+    if (totalServices === 0) {
+      console.log('資料驗證失敗：未選擇任何服務項目');
+      return ContentService.createTextOutput('資料驗證失敗：請至少選擇一個服務項目').setMimeType(ContentService.MimeType.JSON);
+    }
+    
     const SHEET_ID = '17iFNvOb-Gl5B1nDMC9Jf0ls1s8t_a8UK9n2kB23fEo4';
     const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('訂單');
 

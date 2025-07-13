@@ -327,6 +327,19 @@ document.getElementById("orderForm").onsubmit = function(event){
     alert("請勾選同意服務規則！");
     return;
   }
+  
+  // 檢查聯絡方式
+  if (!document.getElementById('contactMethod').value) {
+    alert("請選擇聯絡方式！");
+    return;
+  }
+  
+  // 檢查聯絡ID
+  if (!document.getElementById('contactId').value.trim()) {
+    alert("請填寫聯絡ID！");
+    return;
+  }
+  
   // 檢查至少有一個項目數量是 1 或以上
   let hasItems = false;
   for(let i=1; i<=5; i++){
@@ -338,6 +351,18 @@ document.getElementById("orderForm").onsubmit = function(event){
   }
   if(!hasItems){
     alert("請至少選擇一個陪玩項目（數量須為 1 或以上）！");
+    return;
+  }
+  
+  // 檢查預約星期
+  if (!document.getElementById('weekday').value) {
+    alert("請選擇預約星期！");
+    return;
+  }
+  
+  // 檢查預約時段
+  if (!document.getElementById('timeblock').value) {
+    alert("請選擇預約時段！");
     return;
   }
   
@@ -412,7 +437,7 @@ document.getElementById("orderForm").onsubmit = function(event){
   const script = document.createElement('script');
   script.id = 'submitScript';
   params.set('callback', callbackName);
-  script.src = "https://script.google.com/macros/s/AKfycbwx7gaPL4sNF4soPrMBjYVhxm4wmGNdamwFekh23ftNqgoXfzDI4r9qd9DfE6xwBy2b/exec?" + params.toString();
+  script.src = "https://script.google.com/macros/s/AKfycbwlq2ROqQzk8wt_Y5-dIrsY9dx8OG-iCmWW7zx-48KFg_3pmDiHQt3wx2riKCv_31BE/exec?" + params.toString();
   document.head.appendChild(script);
   
   // 設定超時機制，避免按鈕永遠被禁用
