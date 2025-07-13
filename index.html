@@ -422,28 +422,20 @@ document.getElementById("orderForm").onsubmit = function(event){
   submitButton.disabled = true;
   submitButton.textContent = '提交中...';
   
-  // 生成唯一的回調函數名稱
-  const callbackName = 'handleResponse_' + Date.now();
+  // 使用固定的回調函數名稱
+  const callbackName = 'handleFormResponse';
   
-  // 清理函數
-  const cleanup = () => {
-    if (window[callbackName]) {
-      delete window[callbackName];
-    }
-    const existingScript = document.getElementById('submitScript');
-    if (existingScript) {
-      document.head.removeChild(existingScript);
-    }
-  };
-  
-  // 先設定回調函數
+  // 設定全域回調函數
   window[callbackName] = function(res) {
     // 重新啟用按鈕
     submitButton.disabled = false;
     submitButton.textContent = '完成預約並送出';
     
-    // 清理資源
-    cleanup();
+    // 清理 script
+    const existingScript = document.getElementById('submitScript');
+    if (existingScript) {
+      document.head.removeChild(existingScript);
+    }
     
     if(res.indexOf("success")>=0){
       alert('預約成功！');
@@ -458,8 +450,11 @@ document.getElementById("orderForm").onsubmit = function(event){
     }
   };
   
-  // 先清理現有的 script
-  cleanup();
+  // 清理現有的 script
+  const existingScript = document.getElementById('submitScript');
+  if (existingScript) {
+    document.head.removeChild(existingScript);
+  }
   
   // 準備參數
   const params = new URLSearchParams(formData);
@@ -472,7 +467,10 @@ document.getElementById("orderForm").onsubmit = function(event){
   
   // 設定超時機制，避免按鈕永遠被禁用
   setTimeout(() => {
-    cleanup();
+    const script = document.getElementById('submitScript');
+    if (script) {
+      document.head.removeChild(script);
+    }
     if (submitButton.disabled) {
       submitButton.disabled = false;
       submitButton.textContent = '完成預約並送出';
